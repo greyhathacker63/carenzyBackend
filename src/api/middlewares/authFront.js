@@ -23,7 +23,7 @@ module.exports = {
 	},
 
 
-	validateToken: async function (req, res, next) {
+	validateToken: async (req, res, next) => {
 		try {
 			if (req.headers.authorization) {
 				const authorization = req.headers.authorization.trim();
@@ -34,7 +34,7 @@ module.exports = {
 					const decode = jwt.verify(token, config.jwt.secretKey);
 
 					try {
-						const cuser = await userModel.findOne({ _id, isDeleted: false });
+						const cuser = await masterAdminModule.findById(decode.sub);
 						if (!cuser) {
 							throw new Error();
 						} else if (!cuser.status) {
@@ -42,16 +42,14 @@ module.exports = {
 							return;
 						}
 						req.__cuser = cuser;
-						req.__cuser.verifcationStatus = true; // remove this as we are using it make all dealers use application
-						const { data: subscriptionData } = await subscriptionService.getDealerLastSubscriptionDate(cuser._id);
-						req.__cuser.subscriptionData = subscriptionData;
-						req.__cuser.subscriptionExpired = subscriptionData.lastDate ? new Date(subscriptionData.lastDate) < new Date() : true;
 					} catch (e) {
+						Logger.error('User does not exist');
 						throw new Error();
 					}
 
 					next();
 				} else {
+					Logger.error('Invalid authorization value');
 					throw Response.createError(Message.invalidToken);
 				}
 			} else {
@@ -59,6 +57,7 @@ module.exports = {
 			}
 
 		} catch (e) {
+			Logger.error('AuthMiddleware Failed : ', e);
 			Response.fail(res, 'Unauthorized! Try login again.', HttpStatus.StatusCodes.UNAUTHORIZED);
 		}
 	},
