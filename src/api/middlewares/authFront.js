@@ -34,7 +34,6 @@ module.exports = {
 					const decode = jwt.verify(token, config.jwt.secretKey);
 
 					try {
-						// const _id = "64ab9c57fe853288371fa343"
 						const cuser = await userModel.findOne({ _id, isDeleted: false });
 						if (!cuser) {
 							throw new Error();
