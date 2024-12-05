@@ -20,6 +20,11 @@ class Controller {
     static async save(req, res) {
         try {
             const response = { message: Message.badRequest.message, code: Message.badRequest.code };
+            console.log(req)
+            console.log(req.__cuser)
+            console.log(req.__cuser.location)
+
+
             const srvRes = await service.save({ ...req.body, locationDealer: req.__cuser.location, dealerId: req.__cuser._id });
             if (srvRes.status) {
                 let biddingMinutes = 0;

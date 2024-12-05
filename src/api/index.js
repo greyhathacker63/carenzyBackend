@@ -179,7 +179,7 @@ const api = (app) => {
     app.use('/dealer/fueltype', fuelTypeFrontRoute);
     app.use('/dealer/bodytype', bodyTypeFrontRoute);
     app.use('/dealer/rto', rtoRoute);
-    app.use('/dealer/dealer-car', validateTokenFront, dealerCarRoute);
+    app.use('/dealer/dealer-car', validateTokenFront, dealerCarRoute);//comment
     app.use('/dealer/dealer-lead', validateTokenFront, dealerLeadRoute);
     app.use('/dealer/search', validateTokenFront, dealerSearchRoute);
     app.use('/dealer/setting', dealerSettingRoute);
