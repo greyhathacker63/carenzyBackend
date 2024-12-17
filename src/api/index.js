@@ -41,11 +41,9 @@ const newCarAdmin = require("./modules/admin/newcar/route");
 const adminSetting = require("./modules/admin/setting/route");
 const blogCategory = require("./modules/admin/category/route");
 const blogCategoryRoute = require("./modules/blog/category/route");
-
 const adminSubscriptionRoute = require("./modules/admin/subscription/route");
-
 const adminDealerDataVerify = require("./modules/admin/dealer_data_verify/route");
-
+const promoMediaRoute = require('./modules/admin/promoMedia/route')
 
 /*
 |--------------------------------------------------------------------------
@@ -160,6 +158,7 @@ const api = (app) => {
     app.use('/admin/setting', adminSetting);
     app.use('/admin/subscription', validateToken, adminSubscriptionRoute);
     app.use('/admin/data-verify', adminDealerDataVerify);
+    app.use('/admin/promo-media',promoMediaRoute)
 
     /*
     |--------------------------------------------------------------------------
