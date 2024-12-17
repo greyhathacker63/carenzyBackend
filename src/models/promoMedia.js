@@ -36,4 +36,4 @@ const promoMediaSchema = new Schema(
 );
 
 
-module.exports = mongoose.model('PromoMedia', promoMediaSchema);
+module.exports = mongoose.model('promo_media', promoMediaSchema);

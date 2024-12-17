@@ -31,6 +31,43 @@ class Controller {
             });
         }
     }
+    static async list(req, res) {
+        try {
+            const { _id } = req.query;
+    
+            if (!_id) {
+                return res.json({
+                    status_code: false,
+                    message: "Please provide _id",
+                    data:{}
+                });
+            }
+    
+            const createdPromo = await promoMedia.findById(_id);
+    
+            if (!createdPromo) {
+                return res.json({
+                    status_code: false,
+                    message: "Please provide a correct ID",
+                    data:{}
+                });
+            }
+    
+            return res.status(200).json({
+                status_code: true,
+                message: "Promo fetched successfully",
+                data: createdPromo,
+            });
+    
+        } catch (error) {
+            return res.status(500).json({
+                status_code: false,
+                message: error.message || "Internal Server Error",
+                data:{}
+            });
+        }
+    }
+    
 }
 
 module.exports = Controller;

@@ -3,7 +3,7 @@ const controller = require('./controller');
 
 const router = Router(); // Instantiate the router
 
-// Define the route
-router.post('/createPromo', controller.create); // Correct path and usage
+router.post('/createPromo', controller.create);
+router.get('/list',controller.list)
 
-module.exports = router; // Export the router instance
+module.exports = router; 
