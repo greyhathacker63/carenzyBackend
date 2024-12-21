@@ -17,6 +17,10 @@ const pollSchema = new Schema(
             type: String,
             required: true,
         },
+        is_deleted: {
+            type: Boolean,
+            default: false
+        },
         answers: [ansSchema],
     },
     {

@@ -52,12 +52,12 @@ class PollController {
             limit = Number(limit);
 
             if (!_id) {
-                const polls = await Poll.find({})
+                const polls = await Poll.find({ is_deleted: false })
                     .skip((page - 1) * limit)
                     .limit(limit)
                     .lean();
 
-                const totalPolls = await Poll.countDocuments();
+                const totalPolls = await Poll.countDocuments({ is_deleted: false });
 
                 return res.json({
                     status_code: true,
