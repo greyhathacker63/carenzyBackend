@@ -7,6 +7,7 @@ const databaseConnect = () => {
     // mongoose.set('debug', true);
     mongoose.connect(config.dbConnectionUrl);
     mongoose.connection.on('connected', function () {
+        console.log("env",  process.env.DB_CONNECTION_URL)
         console.log('Database connected');
         Logger.info("Database Connected");
     });

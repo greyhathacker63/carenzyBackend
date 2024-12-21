@@ -32,7 +32,7 @@ const AdminSurveyQuesRoute = require("./modules/admin/surveyQues/route");
 const AdminSurveyQuesOptRoute = require("./modules/admin/surveryQuesOptions/route");
 const VariantSpecFeatureRoute = require("./modules/admin/variantSpecFeature/route");
 const rightGrpRoute = require("./modules/admin/rightsGrp/route");
-// const biddingCarAdmin = require("./modules/admin/biddingCar/route");
+const biddingCarAdmin = require("./modules/admin/biddingCar/route");
 const adminBlogRoute = require("./modules/admin/blog/route");
 const adminBlogCommentRoute = require("./modules/admin/blogComment/route");
 const adminAuthorRoute = require("./modules/admin/author/route");
@@ -148,7 +148,7 @@ const api = (app) => {
     app.use('/admin/survey-ques-opt', validateToken, AdminSurveyQuesOptRoute);
     app.use('/admin/right-group', validateToken, rightGrpRoute);
     app.use('/admin/variant-spec-feature', validateToken, VariantSpecFeatureRoute);
-    // app.use('/admin/bidding-car', validateToken, biddingCarAdmin);
+    app.use('/admin/bidding-car', validateToken, biddingCarAdmin);
     app.use('/admin/author', validateToken, adminAuthorRoute);
     app.use('/admin/blog', validateToken, adminBlogRoute);
     app.use('/admin/blog-comment', validateToken, adminBlogCommentRoute);
