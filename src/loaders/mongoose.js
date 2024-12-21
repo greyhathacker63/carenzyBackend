@@ -3,6 +3,7 @@ const Logger = require('../utilities/Logger');
 const config = require('../config');
 
 const databaseConnect = () => {
+    console.log("check mongo string")
     mongoose.set("strictQuery", false);
     // mongoose.set('debug', true);
     mongoose.connect(config.dbConnectionUrl);

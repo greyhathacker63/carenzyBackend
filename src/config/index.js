@@ -3,7 +3,8 @@ const config = {
   IsProd: process.env.NODE_ENV === 'prod',
 
   port: parseInt(process.env.PORT, 10) || 3000,
-  dbConnectionUrl: process.env.DB_CONNECTION_URL,
+  // dbConnectionUrl: process.env.DB_CONNECTION_URL,
+  dbConnectionUrl:"mongodb://mongoadmin:ZGJhcnJhbXRvbjdtb25nbwo@mongo.carenzy.com:22018/carenzy?authSource=admin",
   uploadServerIp: process.env.UPLOAD_SERVER_IP_ADD,
   appBaseUrl:
     process.env.NODE_ENV !== 'prod'
