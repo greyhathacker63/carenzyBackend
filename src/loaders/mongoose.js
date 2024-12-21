@@ -4,9 +4,12 @@ const config = require('../config');
 
 const databaseConnect = () => {
     console.log("check mongo string")
+    console.log("envUrl",  process.env.DB_CONNECTION_URL)
+
     mongoose.set("strictQuery", false);
     // mongoose.set('debug', true);
     mongoose.connect(config.dbConnectionUrl);
+    console.log("config.dbConnectionUrl",config.dbConnectionUrl)
     mongoose.connection.on('connected', function () {
         console.log("env",  process.env.DB_CONNECTION_URL)
         console.log('Database connected');
