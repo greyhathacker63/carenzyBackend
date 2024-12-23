@@ -45,7 +45,6 @@ class PollController {
         }
     }
     static async detail(req, res) {
-
         try {
             let { _id, page = 1, limit = 20 } = req.query;
             page = Number(page);
@@ -86,6 +85,12 @@ class PollController {
                 status_code: true,
                 message: "Poll fetched successfully",
                 data: poll,
+                pagination: {
+                    total: poll.length,
+                    page,
+                    limit,
+                    totalPages: Math.ceil(poll.length / limit),
+                },
             });
 
         } catch (error) {
@@ -143,7 +148,57 @@ class PollController {
         }
     }
 
+    static async edit(req, res) {
+        try {
+            let { _id } = req.query;
+            page = Number(page);
+            limit = Number(limit);
 
+            if (!_id) {
+                const polls = await Poll.find({ is_deleted: false })
+                    .skip((page - 1) * limit)
+                    .limit(limit)
+                    .lean();
+
+                const totalPolls = await Poll.countDocuments({ is_deleted: false });
+
+                return res.json({
+                    status_code: true,
+                    message: "Polls fetched successfully",
+                    data: polls,
+                    pagination: {
+                        total: totalPolls,
+                        page,
+                        limit,
+                        totalPages: Math.ceil(totalPolls / limit),
+                    },
+                });
+            }
+
+            const poll = await Poll.findById(_id).lean();
+
+            if (!poll) {
+                return res.json({
+                    status_code: false,
+                    message: "Poll not found, please provide a correct _id",
+                    data: null,
+                });
+            }
+
+            res.json({
+                status_code: true,
+                message: "Poll fetched successfully",
+                data: poll,
+            });
+
+        } catch (error) {
+            res.json({
+                status_code: false,
+                message: error.message || "An error occurred while fetching poll data.",
+                data: {},
+            });
+        }
+    }
 
 
 }
