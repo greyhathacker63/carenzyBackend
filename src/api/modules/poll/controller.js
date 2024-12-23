@@ -150,32 +150,21 @@ class PollController {
 
     static async edit(req, res) {
         try {
-            let { _id } = req.query;
-            page = Number(page);
-            limit = Number(limit);
+            let { _id,question,is_deleted,ans_position,answer} = req.body;
+            const filter = {}
 
-            if (!_id) {
-                const polls = await Poll.find({ is_deleted: false })
-                    .skip((page - 1) * limit)
-                    .limit(limit)
-                    .lean();
-
-                const totalPolls = await Poll.countDocuments({ is_deleted: false });
-
-                return res.json({
-                    status_code: true,
-                    message: "Polls fetched successfully",
-                    data: polls,
-                    pagination: {
-                        total: totalPolls,
-                        page,
-                        limit,
-                        totalPages: Math.ceil(totalPolls / limit),
-                    },
-                });
+            if(is_deleted){
+                filter.is_deleted = is_deleted
             }
-
-            const poll = await Poll.findById(_id).lean();
+            if(question){
+                filter.question = question
+            }
+            if (answer) {
+                filter[`answers.${ans_position}.answer`] = answer;
+            }            
+            
+            console.log("filter",filter)
+            const poll = await Poll.findByIdAndUpdate(_id, {$set: filter},{new: true})
 
             if (!poll) {
                 return res.json({
@@ -187,7 +176,7 @@ class PollController {
 
             res.json({
                 status_code: true,
-                message: "Poll fetched successfully",
+                message: "Poll update sucessfully",
                 data: poll,
             });
 
