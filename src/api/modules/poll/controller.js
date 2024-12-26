@@ -150,21 +150,20 @@ class PollController {
 
     static async edit(req, res) {
         try {
-            let { _id,question,is_deleted,ans_position,answer} = req.body;
+            let { _id, question, is_deleted, ans_position, answer } = req.body;
             const filter = {}
 
-            if(is_deleted){
+            if (is_deleted) {
                 filter.is_deleted = is_deleted
             }
-            if(question){
+            if (question) {
                 filter.question = question
             }
             if (answer) {
                 filter[`answers.${ans_position}.answer`] = answer;
-            }            
-            
-            console.log("filter",filter)
-            const poll = await Poll.findByIdAndUpdate(_id, {$set: filter},{new: true})
+            }
+ 
+            const poll = await Poll.findByIdAndUpdate(_id, { $set: filter }, { new: true })
 
             if (!poll) {
                 return res.json({
