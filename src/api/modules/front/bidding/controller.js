@@ -105,7 +105,7 @@ class bidController {
             page = Number(page)
             limit = Number(limit)
             const filter = _id ? { _id: ObjectId(_id) } : {}
-            
+
             const allBidding = await bidding.aggregate([
                 {
                     $match: filter
@@ -140,6 +140,54 @@ class bidController {
             })
         }
     }
+    static async edit(req, res) {
+        try {
+            const { _id, ...update } = req.body;
+
+            if (!_id) {
+                return res.json({
+                    status_code: false,
+                    message: "Please provide _id",
+                    data: {},
+                });
+            }
+
+            if (!Object.keys(update).length) {
+                return res.json({
+                    status_code: false,
+                    message: "Please provide at least one field to update",
+                    data: {},
+                });
+            }
+
+            const updatedData = await bidding.findByIdAndUpdate(
+                _id,
+                { $set: update },
+                { new: true }
+            );
+
+            if (!updatedData) {
+                return res.json({
+                    status_code: false,
+                    message: "Invalid _id provided",
+                    data: {},
+                });
+            }
+
+            res.json({
+                status_code: true,
+                message: "Data updated successfully",
+                data: updatedData,
+            });
+        } catch (error) {
+            res.json({
+                status_code: false,
+                message: `An error occurred while updating data ${error.message}`,
+                data: {},
+            });
+        }
+    }
+
 }
 
 module.exports = bidController;
