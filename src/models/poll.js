@@ -3,15 +3,24 @@ const { Schema } = mongoose;
 
 const ansSchema = new Schema(
     {
-        answer: { type: String },
-        count: { type: Number },
+        answer: {
+            type: String
+        },
+        count: {
+            type: Number
+        },
     },
-    { _id: false }
+    {
+        _id: false
+    }
 );
 
 const pollSchema = new Schema(
     {
-        question: { type: String, required: true },
+        question: {
+            type: String,
+            required: true
+        },
         answers: [ansSchema],
     },
     {
