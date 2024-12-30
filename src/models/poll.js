@@ -1,28 +1,23 @@
 const mongoose = require('mongoose');
-const { Schema, Types } = mongoose;
+const { Schema } = mongoose;
 
-const ansSchema = new Schema({
-    answer: {
-        type: String, 
+const ansSchema = new Schema(
+    {
+        answer: { type: String },
+        count: { type: Number },
     },
-});
+    { _id: false }
+);
 
 const pollSchema = new Schema(
     {
-        user_id: {
-            type: Types.ObjectId,
-            required: true,
-        },
-        question: {
-            type: String,
-            required: true,
-        },
-        answers: [ansSchema], 
+        question: { type: String, required: true },
+        answers: [ansSchema],
     },
     {
-        timestamps: true, 
+        timestamps: true,
         versionKey: false,
     }
 );
 
-module.exports = mongoose.model('poll', pollSchema);
+module.exports = mongoose.model('Poll', pollSchema);
