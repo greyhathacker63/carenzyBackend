@@ -1,4 +1,7 @@
+const { messaging } = require('firebase-admin');
 const bidding = require('../../../../models/bid');
+const mongoose = require('mongoose')
+const { ObjectId } = mongoose.Types
 
 class bidController {
     static async save(req, res) {
@@ -94,6 +97,46 @@ class bidController {
                 message: error.message,
                 data: {},
             });
+        }
+    }
+    static async detail(req, res) {
+        try {
+            let { _id, page = 1, limit = 20 } = req.query
+            page = Number(page)
+            limit = Number(limit)
+            const filter = _id ? { _id } : {}
+            const allBidding = await bidding.aggregate([
+                {
+                    $match: filter
+                },
+                {
+                    $facet: {
+                        total: [
+                            { $count: "count" }
+                        ],
+                        paginatedData: [
+                            { $skip: (page - 1) * limit },
+                            { $limit: limit }
+                        ]
+                    }
+                }
+            ]);
+            const total_length = allBidding[0].total[0].count
+            const data = allBidding[0].paginatedData
+
+            res.json({
+                status_code: data.length > 0,
+                message: data.length > 0 ? "Biddding fetch sucessfully" : "No bidding exists",
+                data: data,
+                total: total_length
+            })
+        }
+        catch (error) {
+            res.json({
+                status_code: false,
+                message: error.message || "Internal server error",
+                data: []
+            })
         }
     }
 }

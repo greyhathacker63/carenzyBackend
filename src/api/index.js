@@ -150,7 +150,7 @@ const api = (app) => {
     app.use('/admin/survey-ques-opt', validateToken, AdminSurveyQuesOptRoute);
     app.use('/admin/right-group', validateToken, rightGrpRoute);
     app.use('/admin/variant-spec-feature', validateToken, VariantSpecFeatureRoute);
-    app.use('/admin/bidding-car', biddingCarAdmin);
+    // app.use('/admin/bidding-car', biddingCarAdmin);
     app.use('/admin/author', validateToken, adminAuthorRoute);
     app.use('/admin/blog', validateToken, adminBlogRoute);
     app.use('/admin/blog-comment', validateToken, adminBlogCommentRoute);

@@ -1,5 +1,4 @@
 const { Router } = require('express');
-<<<<<<< HEAD
 const pollController = require('./controller');
 
 const router = Router();
