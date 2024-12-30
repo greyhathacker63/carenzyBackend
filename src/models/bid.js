@@ -110,9 +110,12 @@ const biddingSchema = new Schema({
         type: String,
         enum: vehicleEnum.transmissionTypes
     }
+<<<<<<< HEAD
 },{
     timestamps: true,
     versionKey: false
+=======
+>>>>>>> 36113ba4ab006fdfb5ccb72b8e4d9d536c1f7e61
 });
 
 module.exports = mongoose.model("bidding_forms", biddingSchema);

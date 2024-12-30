@@ -41,11 +41,9 @@ const newCarAdmin = require("./modules/admin/newcar/route");
 const adminSetting = require("./modules/admin/setting/route");
 const blogCategory = require("./modules/admin/category/route");
 const blogCategoryRoute = require("./modules/blog/category/route");
-
 const adminSubscriptionRoute = require("./modules/admin/subscription/route");
-
 const adminDealerDataVerify = require("./modules/admin/dealer_data_verify/route");
-
+const promoMediaRoute = require('./modules/admin/promoMedia/route')
 
 /*
 |--------------------------------------------------------------------------
@@ -152,7 +150,7 @@ const api = (app) => {
     app.use('/admin/survey-ques-opt', validateToken, AdminSurveyQuesOptRoute);
     app.use('/admin/right-group', validateToken, rightGrpRoute);
     app.use('/admin/variant-spec-feature', validateToken, VariantSpecFeatureRoute);
-    // app.use('/admin/bidding-car', validateToken, biddingCarAdmin);
+    app.use('/admin/bidding-car', biddingCarAdmin);
     app.use('/admin/author', validateToken, adminAuthorRoute);
     app.use('/admin/blog', validateToken, adminBlogRoute);
     app.use('/admin/blog-comment', validateToken, adminBlogCommentRoute);
@@ -162,6 +160,7 @@ const api = (app) => {
     app.use('/admin/setting', adminSetting);
     app.use('/admin/subscription', validateToken, adminSubscriptionRoute);
     app.use('/admin/data-verify', adminDealerDataVerify);
+    app.use('/admin/promo-media',promoMediaRoute)
 
     /*
     |--------------------------------------------------------------------------
@@ -219,6 +218,15 @@ const api = (app) => {
     */
     app.use('/poll',pollRoute)
 
+
+
+
+        /*
+    |--------------------------------------------------------------------------
+    |  poll routes import
+    |--------------------------------------------------------------------------
+    */
+    app.use('/poll',pollRoute)
 
 };
 
