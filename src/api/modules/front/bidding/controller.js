@@ -104,7 +104,8 @@ class bidController {
             let { _id, page = 1, limit = 20 } = req.query
             page = Number(page)
             limit = Number(limit)
-            const filter = _id ? { _id } : {}
+            const filter = _id ? { _id: ObjectId(_id) } : {}
+            
             const allBidding = await bidding.aggregate([
                 {
                     $match: filter
@@ -126,7 +127,7 @@ class bidController {
 
             res.json({
                 status_code: data.length > 0,
-                message: data.length > 0 ? "Biddding fetch sucessfully" : "No bidding exists",
+                message: data.length > 0 ? "Biddding fetched sucessfully" : "No bidding exists",
                 data: data,
                 total: total_length
             })
