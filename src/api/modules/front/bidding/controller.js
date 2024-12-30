@@ -94,7 +94,7 @@ class bidController {
         } catch (error) {
             return res.json({
                 status_code: false,
-                message: error.message,
+                message: `Failed to create form:  + ${error.message}`,
                 data: {},
             });
         }
@@ -121,8 +121,8 @@ class bidController {
                     }
                 }
             ]);
-            const total_length = allBidding[0].total[0].count
-            const data = allBidding[0].paginatedData
+            const total_length = allBidding[0]?.total[0]?.count || 0;
+            const data = allBidding[0]?.paginatedData || [];
 
             res.json({
                 status_code: data.length > 0,
@@ -134,7 +134,7 @@ class bidController {
         catch (error) {
             res.json({
                 status_code: false,
-                message: error.message || "Internal server error",
+                message: `Internal server error: ${error.message}`,
                 data: []
             })
         }
