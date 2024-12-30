@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const controller = require('./controller');
 
-const router = Router(); // Instantiate the router
+const router = Router();
 
 router.post('/createPromo', controller.create);
 router.get('/list',controller.list)
