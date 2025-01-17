@@ -75,25 +75,25 @@ const validations = {
                 }
             }),
 
-        check("manufacturingMonth")
-            .trim()
-            .notEmpty().withMessage("Please select a manufacturing month")
-            .matches(/^(0[1-9]|1[0-2])$/).withMessage("Selected manufacturing month is not valid"),
+        // check("manufacturingMonth")
+        //     .trim()
+        //     .notEmpty().withMessage("Please select a manufacturing month")
+        //     .matches(/^(0[1-9]|1[0-2])$/).withMessage("Selected manufacturing month is not valid"),
 
-        check("manufacturingYear")
-            .trim()
-            .notEmpty().withMessage("Please select manufacturing year")
-            .matches(/^(19\d{2}|20\d{2}|2100)$/).withMessage("Selected manufacturing year is not valid"),
+        // check("manufacturingYear")
+        //     .trim()
+        //     .notEmpty().withMessage("Please select manufacturing year")
+        //     .matches(/^(19\d{2}|20\d{2}|2100)$/).withMessage("Selected manufacturing year is not valid"),
 
-        check("registrationMonth")
-            .trim()
-            .notEmpty().withMessage("Please select a registration month")
-            .matches(/^(0[1-9]|1[0-2])$/).withMessage("Selected registration month is not valid"),
+        // check("registrationMonth")
+        //     .trim()
+        //     .notEmpty().withMessage("Please select a registration month")
+        //     .matches(/^(0[1-9]|1[0-2])$/).withMessage("Selected registration month is not valid"),
 
-        check("registrationYear")
-            .trim()
-            .notEmpty().withMessage("Please select registration year")
-            .matches(/^(19\d{2}|20\d{2}|2100)$/).withMessage("Selected registration year is not valid"),
+        // check("registrationYear")
+        //     .trim()
+        //     .notEmpty().withMessage("Please select registration year")
+        //     .matches(/^(19\d{2}|20\d{2}|2100)$/).withMessage("Selected registration year is not valid"),
 
         check("variantId")
             .trim()
@@ -272,37 +272,37 @@ const validations = {
             // .notEmpty().withMessage("Please upload thumbnail image")
             .isURL().withMessage("Thumbnail image should have valid url"),
 
-        check("interiorImageVideos")
-            .notEmpty().withMessage("Please upload at least one interior image & video")
-            .isArray().withMessage("Interior image & video should be mutiple. It can not have blank data"),
+        // check("interiorImageVideos")
+        //     .notEmpty().withMessage("Please upload at least one interior image & video")
+        //     .isArray().withMessage("Interior image & video should be mutiple. It can not have blank data"),
 
         check("interiorImageVideos.*")
             .trim()
             .notEmpty().withMessage("Interior image & video can not have blank data")
             .isURL().withMessage("Interior image & video should have valid url"),
 
-        check("exteriorImageVideos")
-            .notEmpty().withMessage("Please upload at least one exterior image & video")
-            .isArray().withMessage("Exterior image & video should be mutiple. It can not have blank data"),
+        // check("exteriorImageVideos")
+        //     .notEmpty().withMessage("Please upload at least one exterior image & video")
+        //     .isArray().withMessage("Exterior image & video should be mutiple. It can not have blank data"),
 
         check("exteriorImageVideos.*")
             .trim()
             .notEmpty().withMessage("Exterior image & video can not have blank data")
             .isURL().withMessage("Exterior image & video should have valid url"),
 
-        check("engineImageVideos")
-            .notEmpty().withMessage("Please upload at least one engine image & video")
-            .isArray().withMessage("Engine image & video should be mutiple. It can not have blank data"),
+        // check("engineImageVideos")
+        //     .notEmpty().withMessage("Please upload at least one engine image & video")
+        //     .isArray().withMessage("Engine image & video should be mutiple. It can not have blank data"),
 
         check("engineImageVideos.*")
             .trim()
             .notEmpty().withMessage("Engine image & video can not have blank data")
             .isURL().withMessage("Engine image & video should have valid url"),
 
-        check("rcAvailibity")
-            .trim()
-            .notEmpty().withMessage("Please select RC availibity type")
-            .isIn(["Original", "Duplicate", "Lost"]).withMessage("RC availibity should be one from 'Original', 'Duplicate', 'Lost'"),
+        // check("rcAvailibity")
+        //     .trim()
+        //     .notEmpty().withMessage("Please select RC availibity type")
+        //     .isIn(["Original", "Duplicate", "Lost"]).withMessage("RC availibity should be one from 'Original', 'Duplicate', 'Lost'"),
 
         // check("ownershipType")
         //     .trim()
@@ -335,10 +335,10 @@ const validations = {
         //     .notEmpty().withMessage("Chassis image can not have blank data")
         //     .isURL().withMessage("Chassis image should have valid url"),
 
-        check("chassisNumberEmbossing")
-            .trim()
-            .notEmpty().withMessage("Please select type of chassis number embossing")
-            .isIn(["OK", "Rusted", "Repunched", "No Traceable", "Mis Match", "Incomplete"]).withMessage("Chassis number embossing should be one from 'OK', 'Rusted', 'Repunched', 'No Traceable', 'Mis Match', 'Incomplete'"),
+        // check("chassisNumberEmbossing")
+        //     .trim()
+        //     .notEmpty().withMessage("Please select type of chassis number embossing")
+        //     .isIn(["OK", "Rusted", "Repunched", "No Traceable", "Mis Match", "Incomplete"]).withMessage("Chassis number embossing should be one from 'OK', 'Rusted', 'Repunched', 'No Traceable', 'Mis Match', 'Incomplete'"),
 
         // check("insuranceImages")
         //     .notEmpty().withMessage("Please upload at least one insurance image")

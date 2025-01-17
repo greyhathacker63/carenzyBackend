@@ -28,10 +28,15 @@ class Controller {
             const srvRes = await service.save({ ...req.body, locationDealer: req.__cuser.location, dealerId: req.__cuser._id });
             if (srvRes.status) {
                 let biddingMinutes = 0;
-                if (req.body.type?.includes('Bidding')) {
+                // if (req.body.type?.includes('Bidding')) {
                     try {
+                        console.log("1")
                         biddingMinutes = (await configurationServices.details({ type: 'Bidding Duration' }))?.data?.value || 0;
+                        console.log("2")
+
                         biddingMinutes = biddingMinutes * 1;
+                        console.log("3")
+
                     } catch (error) {
                     }
                     const { data: liveBiddingDetails } = await biddingLiveServices.save({
@@ -44,16 +49,16 @@ class Controller {
                         firebaseServices.newCarInBid({ dealerCarId: srvRes.data?._id, bidId: liveBiddingDetails._id });
                     } catch (error) {
                     }
-                } else {
-                    const { data: marketPlaceDetails } = await dealerCarMarketPlaceServices.save({ dealerCarId: srvRes.data?._id, startTime: Date.now() + biddingMinutes * 60 * 1000 });
+                // } else {
+                //     const { data: marketPlaceDetails } = await dealerCarMarketPlaceServices.save({ dealerCarId: srvRes.data?._id, startTime: Date.now() + biddingMinutes * 60 * 1000 });
 
-                    // setTimeout(() => {
-                    //     try {
-                    //         firebaseServices.newCarInMarketPlace({ dealerCarId: srvRes.data?._id, marketPlaceId: marketPlaceDetails._id });
-                    //     } catch (error) {
-                    //     }
-                    // }, biddingMinutes * 60 * 1000);
-                }
+                //     // setTimeout(() => {
+                //     //     try {
+                //     //         firebaseServices.newCarInMarketPlace({ dealerCarId: srvRes.data?._id, marketPlaceId: marketPlaceDetails._id });
+                //     //     } catch (error) {
+                //     //     }
+                //     // }, biddingMinutes * 60 * 1000);
+                // }
 
 
                 try {

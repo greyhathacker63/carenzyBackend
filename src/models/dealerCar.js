@@ -16,10 +16,10 @@ const dealerCarSchema = new mongoose.Schema({
 		type: mongoose.Types.ObjectId,
 		ref: "model_variant"
 	},
-	colorId: {
-		type: mongoose.Types.ObjectId,
-		ref: "color"
-	},
+	// colorId: {
+	// 	type: mongoose.Types.ObjectId,
+	// 	ref: "color"
+	// },
 	rtoId: {
 		type: mongoose.Types.ObjectId,
 		ref: "rto"
@@ -28,73 +28,73 @@ const dealerCarSchema = new mongoose.Schema({
 		type: mongoose.Types.ObjectId,
 		ref: "state"
 	},
-	cityId: {
-		type: mongoose.Types.ObjectId,
-		ref: "city"
-	},
+	// cityId: {
+	// 	type: mongoose.Types.ObjectId,
+	// 	ref: "city"
+	// },
 	fuelTypeId: {
 		type: mongoose.Types.ObjectId,
 		ref: "fuel_type"
 	},
-	type: [{
-		type: String,
-		enum: ['Market', 'Bidding']
-	}],
+	// type: [{
+	// 	type: String,
+	// 	enum: ['Market', 'Bidding']
+	// }],
 	underHypothecation: {
 		type: Boolean,
 		default: false
 	},
-	registrationNumber: {
-		type: String,
-		trim: true,
-	},
-	collaboration: {
-		type: String,
-		trim: true,
-	},
-	information: {
-		type: String,
-		trim: true
-	},
+	// registrationNumber: {
+	// 	type: String,
+	// 	trim: true,
+	// },
+	// collaboration: {
+	// 	type: String,
+	// 	trim: true,
+	// },
+	// information: {
+	// 	type: String,
+	// 	trim: true
+	// },
 	askingPrice: {
 		type: Number,
 	},
-	biddingIncGap: {
-		type: Number,
-		default: 5000,
-	},
-	location: {
-		type: String,
-		trim: true
-	},
-	locationDealer: {
-		type: String,
-		trim: true
-	},
-	manufacturingMonth: {
-		type: String,
-		trim: true
-	},
-	manufacturingYear: {
-		type: String,
-		trim: true
-	},
-	registrationMonth: {
-		type: String,
-		trim: true
-	},
-	registrationYear: {
-		type: String,
-		trim: true
-	},
-	insuranceExpiryMonth: {
-		type: String,
-		trim: true
-	},
-	insuranceExpiryYear: {
-		type: String,
-		trim: true
-	},
+	// biddingIncGap: {
+	// 	type: Number,
+	// 	default: 5000,
+	// },
+	// location: {
+	// 	type: String,
+	// 	trim: true
+	// },
+	// locationDealer: {
+	// 	type: String,
+	// 	trim: true
+	// },
+	// manufacturingMonth: {
+	// 	type: String,
+	// 	trim: true
+	// },
+	// manufacturingYear: {
+	// 	type: String,
+	// 	trim: true
+	// },
+	// registrationMonth: {
+	// 	type: String,
+	// 	trim: true
+	// },
+	// registrationYear: {
+	// 	type: String,
+	// 	trim: true
+	// },
+	// insuranceExpiryMonth: {
+	// 	type: String,
+	// 	trim: true
+	// },
+	// insuranceExpiryYear: {
+	// 	type: String,
+	// 	trim: true
+	// },
 	insuranceType: {
 		type: String,
 		enum: ["Comprehensive", "Zero Depreciation", "3rd Party", "Insurance Expired"]
@@ -113,11 +113,11 @@ const dealerCarSchema = new mongoose.Schema({
 		type: Number,
 		trim: true
 	},
-	paintedPiecesCount: {
-		type: Number,
-		default: 0,
-		trim: true
-	},
+	// paintedPiecesCount: {
+	// 	type: Number,
+	// 	default: 0,
+	// 	trim: true
+	// },
 	transmissionType: {
 		type: String,
 		enum: ["Automatic", "Manual"],
@@ -146,89 +146,89 @@ const dealerCarSchema = new mongoose.Schema({
 		type: String,
 		trim: true
 	}],
-	rcAvailibity: {
-		type: String,
-		enum: ["Original", "Duplicate", "Lost"],
-		default: "Original"
-	},
-	ownershipType: {
-		type: String,
-		enum: ["First", "Second", "Third"],
-		default: "First"
-	},
-	rcImages: [{
-		type: String,
-	}],
-	chassisNumber: {
-		type: String,
-		trim: true
-	},
-	chassisImages: [{
-		type: String,
-	}],
-	chassisNumberEmbossing: {
-		type: String,
-		enum: ["OK", "Rusted", "Repunched", "No Traceable", "Mis Match", "Incomplete"],
-		default: "OK"
-	},
-	insuranceImages: [{
-		type: String,
-	}],
-	additionalPhotos: [{
-		type: String,
-	}],
-	additionInformation: {
-		type: String,
-		default: null
-	},
-	reportAlreadyPainted: {
-		type: String,
-		trim: true,
-	},
-	reportPaintingRequired: {
-		type: String,
-		trim: true,
-	},
-	reportPieceChange: {
-		type: String,
-		trim: true,
-	},
-	reportStearing: {
-		type: String,
-		trim: true,
-	},
-	reportSuspension: {
-		type: String,
-		trim: true,
-	},
-	reportEngine: {
-		type: String,
-		trim: true,
-	},
-	reportAC: {
-		type: String,
-		trim: true,
-	},
-	reportRusting: {
-		type: String,
-		trim: true,
-	},
-	reportTyres: {
-		type: String,
-		trim: true,
-	},
-	reportSunroof: {
-		type: String,
-		trim: true,
-	},
-	reportInterior: {
-		type: String,
-		trim: true,
-	},
-	reportRefurb: {
-		type: String,
-		trim: true,
-	},
+	// rcAvailibity: {
+	// 	type: String,
+	// 	enum: ["Original", "Duplicate", "Lost"],
+	// 	default: "Original"
+	// },
+	// ownershipType: {
+	// 	type: String,
+	// 	enum: ["First", "Second", "Third"],
+	// 	default: "First"
+	// },
+	// rcImages: [{
+	// 	type: String,
+	// }],
+	// chassisNumber: {
+	// 	type: String,
+	// 	trim: true
+	// },
+	// chassisImages: [{
+	// 	type: String,
+	// }],
+	// chassisNumberEmbossing: {
+	// 	type: String,
+	// 	enum: ["OK", "Rusted", "Repunched", "No Traceable", "Mis Match", "Incomplete"],
+	// 	default: "OK"
+	// },
+	// insuranceImages: [{
+	// 	type: String,
+	// }],
+	// additionalPhotos: [{
+	// 	type: String,
+	// }],
+	// additionInformation: {
+	// 	type: String,
+	// 	default: null
+	// },
+	// reportAlreadyPainted: {
+	// 	type: String,
+	// 	trim: true,
+	// },
+	// reportPaintingRequired: {
+	// 	type: String,
+	// 	trim: true,
+	// },
+	// reportPieceChange: {
+	// 	type: String,
+	// 	trim: true,
+	// },
+	// reportStearing: {
+	// 	type: String,
+	// 	trim: true,
+	// },
+	// reportSuspension: {
+	// 	type: String,
+	// 	trim: true,
+	// },
+	// reportEngine: {
+	// 	type: String,
+	// 	trim: true,
+	// },
+	// reportAC: {
+	// 	type: String,
+	// 	trim: true,
+	// },
+	// reportRusting: {
+	// 	type: String,
+	// 	trim: true,
+	// },
+	// reportTyres: {
+	// 	type: String,
+	// 	trim: true,
+	// },
+	// reportSunroof: {
+	// 	type: String,
+	// 	trim: true,
+	// },
+	// reportInterior: {
+	// 	type: String,
+	// 	trim: true,
+	// },
+	// reportRefurb: {
+	// 	type: String,
+	// 	trim: true,
+	// },
 	// reportDescription: {
 	// 	type: String,
 	// 	trim: true,

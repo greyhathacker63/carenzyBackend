@@ -79,5 +79,28 @@ class controller {
             })
         }
     }
+
+    static async update(req, res) {
+        const { _id, city } = req.body;
+        if(!_id){
+            return Response.fail(res, Response.createError(Message.validationError, 'Please provide state id'));
+        }
+        if (!city) {
+            return Response.fail(res, Response.createError(Message.validationError, 'Please provide city'));
+        }
+        try {
+            const updateCity = await addCity.findOneAndUpdate({ _id }, { $push: { cities: { name: city } } }, { new: true });   
+            if(!updateCity){
+                return Response.fail(res, Response.createError(Message.validationError, 'Please provide correct state id'));
+            }
+            return Response.success(res, {
+                message: 'Data updated successfully',
+                data: updateCity
+            });
+    }catch (err) {
+        console.error('Error updating data:', err); 
+        return Response.fail(res, Response.createError(Message, 'An error occurred while updating data'));
+    }
+}
 }
 module.exports = controller;
