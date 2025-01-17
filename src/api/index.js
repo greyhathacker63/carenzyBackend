@@ -162,8 +162,8 @@ const api = (app) => {
     app.use('/admin/setting', adminSetting);
     app.use('/admin/subscription', validateToken, adminSubscriptionRoute);
     app.use('/admin/data-verify', adminDealerDataVerify);
-    app.use('/admin/promo-media',promoMediaRoute)
-    app.use('/admin/addCity',validateToken,addCityRoute)
+    app.use('/admin/promo-media', promoMediaRoute)
+    app.use('/admin/addCity', validateToken, addCityRoute)
 
     /*
     |--------------------------------------------------------------------------
@@ -213,13 +213,13 @@ const api = (app) => {
     app.use('/common', commonRoute);
 
 
-    
-        /*
-    |--------------------------------------------------------------------------
-    |  poll routes import
-    |--------------------------------------------------------------------------
-    */
-    app.use('/poll',pollRoute)
+
+    /*
+|--------------------------------------------------------------------------
+|  poll routes import
+|--------------------------------------------------------------------------
+*/
+    app.use('/poll', pollRoute)
 
 
 };

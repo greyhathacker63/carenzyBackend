@@ -36,6 +36,48 @@ class controller {
             return Response.fail(res, Response.createError(Message.dataSavingError, 'An error occurred while saving data'));
         }
     }
+    static async details(req, res) {
+        let { state_id, page = 1, limit = 20 } = req.query;
+        page = Math.max(1, parseInt(page));
+        limit = Math.max(1, parseInt(limit));
+        const filter = {}
+        try {
+            if (state_id) {
+                filter._id = state_id
+            }
+            const cityData = await addCity.aggregate([
+                {
+                    $match: filter
+                },
+                {
+                    $facet: {
+                        data: [
+                            { $sort: { createdAt: -1 } },
+                            { $skip: (page - 1) * limit },
+                            { $limit: limit }
+                        ],
+                        total: [
+                            { $count: 'total' }
+                        ]
+                    }
+                }
+            ])
+            const data = cityData[0]?.data || [];
+            const total = cityData[0]?.total[0]?.total || 0;
+            res.json({
+                status_code: true,
+                data,
+                total
+            })
+        }
+        catch (err) {
+            res.json({
+                status_code: false,
+                message: err.message,
+                data: [],
+                total: 0
+            })
+        }
+    }
 }
-
 module.exports = controller;

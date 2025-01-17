@@ -245,7 +245,13 @@ const dealerCarSchema = new mongoose.Schema({
 	isDeleted: {
 		type: Boolean,
 		default: false
-	}
+	},
+	year:{
+		type: String,
+	},
+	modifiedPrice:{
+		type: Number,
+	},
 }, { timestamps: true });
 
 // dealerCarSchema.index({ 'dealerId': 1 });
