@@ -29,35 +29,35 @@ class Controller {
             if (srvRes.status) {
                 let biddingMinutes = 0;
                 // if (req.body.type?.includes('Bidding')) {
-                    try {
-                        console.log("1")
-                        biddingMinutes = (await configurationServices.details({ type: 'Bidding Duration' }))?.data?.value || 0;
-                        console.log("2")
+                //     try {
+                //         console.log("1")
+                //         biddingMinutes = (await configurationServices.details({ type: 'Bidding Duration' }))?.data?.value || 0;
+                //         console.log("2")
 
-                        biddingMinutes = biddingMinutes * 1;
-                        console.log("3")
+                //         biddingMinutes = biddingMinutes * 1;
+                //         console.log("3")
 
-                    } catch (error) {
-                    }
-                    const { data: liveBiddingDetails } = await biddingLiveServices.save({
-                        dealerCarId: srvRes.data?._id,
-                        startTime: Date.now(),
-                        endTime: Date.now() + biddingMinutes * 60 * 1000,
-                        lastBid: (/* srvRes.data?.askingPrice +  */(srvRes.data?.biddingIncGap || 5000))
-                    });
-                    try {
-                        firebaseServices.newCarInBid({ dealerCarId: srvRes.data?._id, bidId: liveBiddingDetails._id });
-                    } catch (error) {
-                    }
+                //     } catch (error) {
+                //     }
+                //     const { data: liveBiddingDetails } = await biddingLiveServices.save({
+                //         dealerCarId: srvRes.data?._id,
+                //         startTime: Date.now(),
+                //         endTime: Date.now() + biddingMinutes * 60 * 1000,
+                //         lastBid: (/* srvRes.data?.askingPrice +  */(srvRes.data?.biddingIncGap || 5000))
+                //     });
+                //     try {
+                //         firebaseServices.newCarInBid({ dealerCarId: srvRes.data?._id, bidId: liveBiddingDetails._id });
+                //     } catch (error) {
+                //     }
                 // } else {
-                //     const { data: marketPlaceDetails } = await dealerCarMarketPlaceServices.save({ dealerCarId: srvRes.data?._id, startTime: Date.now() + biddingMinutes * 60 * 1000 });
+                    const { data: marketPlaceDetails } = await dealerCarMarketPlaceServices.save({ dealerCarId: srvRes.data?._id, startTime: Date.now() + biddingMinutes * 60 * 1000 });
 
-                //     // setTimeout(() => {
-                //     //     try {
-                //     //         firebaseServices.newCarInMarketPlace({ dealerCarId: srvRes.data?._id, marketPlaceId: marketPlaceDetails._id });
-                //     //     } catch (error) {
-                //     //     }
-                //     // }, biddingMinutes * 60 * 1000);
+                    // setTimeout(() => {
+                    //     try {
+                    //         firebaseServices.newCarInMarketPlace({ dealerCarId: srvRes.data?._id, marketPlaceId: marketPlaceDetails._id });
+                    //     } catch (error) {
+                    //     }
+                    // }, biddingMinutes * 60 * 1000);
                 // }
 
 

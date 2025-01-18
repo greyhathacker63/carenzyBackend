@@ -43,7 +43,7 @@ class Controller {
                             as: "rtosDetails",
                             pipeline: [
                                 { $match: { isDeleted: false } },
-                                { $project: { _id: 0, name: 1, code: 1 } }
+                                { $project: { name: 1, code: 1 } }
                             ]
                         }
                     },
@@ -79,7 +79,7 @@ class Controller {
                         as: "rtosDetails",
                         pipeline: [
                             { $match: { isDeleted: false } },
-                            { $project: { _id: 0, name: 1, code: 1 } }
+                            { $project: { name: 1, code: 1 } }
                         ]
                     }
                 },

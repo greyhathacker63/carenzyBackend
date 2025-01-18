@@ -80,27 +80,62 @@ class controller {
         }
     }
 
-    static async update(req, res) {
+    static async addCity(req, res) {
         const { _id, city } = req.body;
-        if(!_id){
-            return Response.fail(res, Response.createError(Message.validationError, 'Please provide state id'));
+        const missingField = ["_id", "city"].filter(field => !req.body[field]);
+        if (missingField.length) {
+            return res.json({
+                status_code: false,
+                message: 'Please provide ' + missingField.join(', '),
+                data: []
+            })
         }
-        if (!city) {
-            return Response.fail(res, Response.createError(Message.validationError, 'Please provide city'));
-        }
+
         try {
-            const updateCity = await addCity.findOneAndUpdate({ _id }, { $push: { cities: { name: city } } }, { new: true });   
-            if(!updateCity){
+            const updateCity = await addCity.findOneAndUpdate({ _id }, { $push: { cities: { name: city } } }, { new: true });
+            if (!updateCity) {
                 return Response.fail(res, Response.createError(Message.validationError, 'Please provide correct state id'));
             }
             return Response.success(res, {
                 message: 'Data updated successfully',
                 data: updateCity
             });
-    }catch (err) {
-        console.error('Error updating data:', err); 
-        return Response.fail(res, Response.createError(Message, 'An error occurred while updating data'));
+        } catch (err) {
+            console.error('Error updating data:', err);
+            return Response.fail(res, Response.createError(Message, 'An error occurred while updating data'));
+        }
     }
-}
+
+    static async updateCity(req, res) {
+        const { _id, city_index, city } = req.body;
+        const missingField = ["_id", "city_index", "city"].filter(field => !req.body[field]);
+        if (missingField.length) {
+            return res.json({
+                status_code: false,
+                message: 'Please provide ' + missingField.join(', '),
+                data: []
+            })
+        }
+        if (typeof city_index !== 'number') {
+            return res.json({
+                status_code: false,
+                message: 'Please provide correct city index',
+                data: []
+            })
+        }
+        const update= await addCity.findOneAndUpdate({ _id, "cities._id": city_index }, { $set: { "cities.$.name": city } }, { new: true });
+        if (!update) {
+            return res.json({
+                status_code: false,
+                message: 'Please provide correct state id or city index',
+                data: []
+            })
+        }
+        res.json({
+            status_code: true,
+            message: 'Data updated successfully',
+            data: update
+        })
+    }
 }
 module.exports = controller;
