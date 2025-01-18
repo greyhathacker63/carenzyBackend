@@ -114,28 +114,93 @@ class controller {
                 status_code: false,
                 message: 'Please provide ' + missingField.join(', '),
                 data: []
-            })
+            });
         }
         if (typeof city_index !== 'number') {
             return res.json({
                 status_code: false,
                 message: 'Please provide correct city index',
                 data: []
-            })
+            });
         }
-        const update= await addCity.findOneAndUpdate({ _id, "cities._id": city_index }, { $set: { "cities.$.name": city } }, { new: true });
-        if (!update) {
+
+        try {
+            const update = await addCity.findOneAndUpdate(
+                { _id },
+                { $set: { [`cities.${city_index}.name`]: city } },
+                { new: true }
+            );
+
+            if (!update) {
+                return res.json({
+                    status_code: false,
+                    message: 'Please provide correct state id or city index',
+                    data: []
+                });
+            }
+
+            res.json({
+                status_code: true,
+                message: 'Data updated successfully',
+                data: update
+            });
+        } catch (err) {
+            console.error('Error updating data:', err);
             return res.json({
                 status_code: false,
-                message: 'Please provide correct state id or city index',
+                message: 'An error occurred while updating data',
                 data: []
-            })
+            });
         }
-        res.json({
-            status_code: true,
-            message: 'Data updated successfully',
-            data: update
-        })
     }
+    static async delete(req, res) {
+        const { _id, city_index } = req.body;
+    
+        // Validate required fields
+        const missingField = ["_id", "city_index"].filter(field => req.body[field] === undefined);
+        if (missingField.length) {
+            return res.json({
+                success: false,
+                message: 'Please provide ' + missingField.join(', '),
+                data: []
+            });
+        }
+    
+        // Validate city_index type
+        if (typeof city_index !== 'number') {
+            return res.json({
+                success: false,
+                message: 'Please provide a valid city index',
+                data: []
+            });
+        }
+    
+        try {
+            // Remove the specific city from the array using $unset
+            const update = await addCity.updateOne(
+                { _id },
+                { $unset: { [`cities.${city_index}`]: 1 } }
+            );
+    
+            // Shift the remaining elements left using $pull to remove null values
+            await addCity.updateOne(
+                { _id },
+                { $pull: { cities: null } }
+            );
+    
+            res.json({
+                success: true,
+                message: 'City deleted successfully',
+                data: update
+            });
+        } catch (err) {
+            return res.json({
+                success: false,
+                message: err.message,
+                data: []
+            });
+        }
+    }
+    
 }
 module.exports = controller;
