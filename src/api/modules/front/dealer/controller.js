@@ -158,22 +158,15 @@ class controller {
 
 	static async dealerUpdate(req, res) {
 		try {
-			console.log(1)
 			const response = { data: null, message: Message.badRequest.message, code: Message.badRequest.code, extra: {} };
-			console.log(2)
 			const crzNumber = req.__cuser.crz ? req.__cuser.crz : await dealerService.generateNextCRZNumber();
-			console.log(3)
 			const srvRes = await dealerService.dealerUpdate({ crz: crzNumber, ...JSON.parse(JSON.stringify(req.__cuser)), ...req.body, _id: req.__cuser._id });
-			console.log(4)
 			if (srvRes.status) {
-				console.log(5)
 				response.message = Message.profileUpdate.message;
 				response.code = Message.profileUpdate.code;
 			}
-			console.log(6)
 			Response.success(res, response);
 		} catch (err) {
-			console.log(err.message)
 			Response.fail(res, Response.createError(Message.dataFetchingError, err));
 		}
 	}
