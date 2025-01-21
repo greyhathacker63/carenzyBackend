@@ -35,6 +35,7 @@ class dealerCarModelServices {
 			// docData.biddingIncGap = data.biddingIncGap || 5000;
 			docData.brandId = data.brandId;
 			docData.modelId = data.modelId;
+			docData.insuranceDate = data.insuranceDate;
 			// docData.manufacturingMonth = data.manufacturingMonth;
 			// docData.manufacturingYear = data.manufacturingYear;
 			// docData.location = data.location;

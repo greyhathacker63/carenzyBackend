@@ -252,6 +252,9 @@ const dealerCarSchema = new mongoose.Schema({
 	modifiedPrice:{
 		type: Number,
 	},
+	insuranceDate:{
+		type: String,
+	}
 }, { timestamps: true });
 
 // dealerCarSchema.index({ 'dealerId': 1 });
