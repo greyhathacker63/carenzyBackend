@@ -201,21 +201,21 @@ const validations = {
             .trim()
             .notEmpty().withMessage("Please enter name"),
 
-        check('rtoId')
-            .trim()
-            .notEmpty().withMessage("Please choose a RTO")
-            .custom(async (value, { req }) => {
-                const { data: [first] } = await rtoService.list({ _id: value });
-                if (first && first._id) {
-                    req.body.stateId = first.stateId;
-                } else {
-                    throw new Error("Selected RTO is not in database");
-                }
-            }),
+        // check('rtoId')
+        //     .trim()
+        //     .notEmpty().withMessage("Please choose a RTO")
+        //     .custom(async (value, { req }) => {
+        //         const { data: [first] } = await rtoService.list({ _id: value });
+        //         if (first && first._id) {
+        //             req.body.stateId = first.stateId;
+        //         } else {
+        //             throw new Error("Selected RTO is not in database");
+        //         }
+        //     }),
 
-        check('dealershipName')
-            .trim()
-            .notEmpty().withMessage("Please enter dealership name"),
+        // check('dealershipName')
+        //     .trim()
+        //     .notEmpty().withMessage("Please enter dealership name"),
 
         check('email')
             .trim()
@@ -238,40 +238,40 @@ const validations = {
             .isNumeric().withMessage("PIN code should be numeric")
             .isLength({ min: 6, max: 6 }).withMessage("PIN code should be of 6 digit"),
 
-        check("aadhaarNo")
-            .trim()
-            .notEmpty().withMessage("Please enter adhar number")
-            .isNumeric().withMessage("Please enter valid adhar number")
-            .isLength({ min: 12, max: 12 }).withMessage("Adhar number should be of 12 digits")
-            .custom(async (value, { req }) => {
-                const { data } = (await dealerService.detailsDealer({ crz: value }));
-                if ((data && data._id && !req.__cuser._id?.toString()) || (data && data._id && (data._id != req.__cuser._id?.toString()))) {
-                    throw new Error("A dealer already exist with this adhar number");
-                }
-            }),
+        // check("aadhaarNo")
+        //     .trim()
+        //     .notEmpty().withMessage("Please enter adhar number")
+        //     .isNumeric().withMessage("Please enter valid adhar number")
+        //     .isLength({ min: 12, max: 12 }).withMessage("Adhar number should be of 12 digits")
+        //     .custom(async (value, { req }) => {
+        //         const { data } = (await dealerService.detailsDealer({ crz: value }));
+        //         if ((data && data._id && !req.__cuser._id?.toString()) || (data && data._id && (data._id != req.__cuser._id?.toString()))) {
+        //             throw new Error("A dealer already exist with this adhar number");
+        //         }
+        //     }),
 
-        check("adharFrontImgUrl")
-            .trim()
-            .notEmpty().withMessage("Please upload adhar front side image"),
+        // check("adharFrontImgUrl")
+        //     .trim()
+        //     .notEmpty().withMessage("Please upload adhar front side image"),
 
-        check("adharBackImgUrl")
-            .trim()
-            .notEmpty().withMessage("Please upload adhar back side image"),
+        // check("adharBackImgUrl")
+        //     .trim()
+        //     .notEmpty().withMessage("Please upload adhar back side image"),
 
-        check("panNo")
-            .trim()
-            .notEmpty().withMessage("Please enter PAN number")
-            .matches(/^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/).withMessage("Please enter valid PAN number")
-            .custom(async (value, { req }) => {
-                const { data } = (await dealerService.detailsDealer({ panNo: value }));
-                if ((data && data._id && !req.__cuser._id?.toString()) || (data && data._id && (data._id != req.__cuser._id?.toString()))) {
-                    throw new Error("A dealer already exist with this PAN number");
-                }
-            }),
+        // check("panNo")
+        //     .trim()
+        //     .notEmpty().withMessage("Please enter PAN number")
+        //     .matches(/^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/).withMessage("Please enter valid PAN number")
+        //     .custom(async (value, { req }) => {
+        //         const { data } = (await dealerService.detailsDealer({ panNo: value }));
+        //         if ((data && data._id && !req.__cuser._id?.toString()) || (data && data._id && (data._id != req.__cuser._id?.toString()))) {
+        //             throw new Error("A dealer already exist with this PAN number");
+        //         }
+        //     }),
 
-        check("panCardimgUrl")
-            .trim()
-            .notEmpty().withMessage("please upload pan card image"),
+        // check("panCardimgUrl")
+        //     .trim()
+        //     .notEmpty().withMessage("please upload pan card image"),
 
         // check('gstNo')
         //     .trim()
