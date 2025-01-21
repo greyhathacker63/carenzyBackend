@@ -203,7 +203,6 @@ class controller {
     }
 
     static async allCity(req, res) {
-        console.log('allCity');
     
         try {
             const cityData = await addCity.find({ is_deleted: false });
@@ -215,7 +214,7 @@ class controller {
                 stateSet.add(city.state);
     
                 city.cities.forEach(arrayCity => {
-                    const key = `${arrayCity.name[0]}_cities`; // Correct variable key format
+                    const key = `${arrayCity.name[0].toLowerCase()}_cities`; // Correct variable key format
                     
                     if (!cityMap[key]) {
                         cityMap[key] = [];
