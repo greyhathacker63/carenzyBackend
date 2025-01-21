@@ -188,11 +188,11 @@ class UserService {
 
             docData.name = data.name;
             docData.bio = data.bio;
-            docData.rtoId = data.rtoId;
+            // docData.rtoId = data.rtoId;
             docData.stateId = data.stateId;
             docData.dealershipName = data.dealershipName;
             docData.email = data.email;
-            docData.location = data.location ?? docData.location;
+            // docData.location = data.location ?? docData.location;
             docData.address = data.address;
             docData.pinCode = data.pinCode;
             docData.aadhaarNo = data.aadhaarNo;
@@ -200,14 +200,15 @@ class UserService {
             docData.adharBackImgUrl = data.adharBackImgUrl;
             docData.panNo = data.panNo;
             docData.panCardimgUrl = data.panCardimgUrl;
-            docData.gstNo = data.gstNo;
-            docData.registrationCertificateId = data.registrationCertificateId;
+            // docData.gstNo = data.gstNo;
+            // docData.registrationCertificateId = data.registrationCertificateId;
 
-            // docData.avatar = data.avatar;
-            // docData.shopPhotoUrl = data.shopPhotoUrl;
-            docData.registrationCertImgUrl = data.registrationCertImgUrl;
-            docData.gstImgUrl = data.gstImgUrl;
-            // docData.crz = data.crz;
+            // // docData.avatar = data.avatar;
+            docData.shopPhotoUrl = data.shopPhotoUrl;
+            // docData.registrationCertImgUrl = data.registrationCertImgUrl;
+            // docData.gstImgUrl = data.gstImgUrl;
+            docData.crz = data.crz;
+            docData.city = data.city;
             // docData.phones = data.phones;
             await docData.save();
 

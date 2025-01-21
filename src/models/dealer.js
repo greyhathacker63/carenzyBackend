@@ -118,6 +118,10 @@ const dealerSchema = new Schema({
     isDeleted: {
         type: Boolean,
         default: false,
+    },
+    city: {
+        type: String,
+        trim: true
     }
 });
 
