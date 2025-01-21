@@ -16,7 +16,7 @@ class controller {
         }
 
         // Ensure each city is an object
-        const cityObjects = city.map(c => ({ name: c }));
+        const cityObjects = city.map(c => ({ name: c.toLowerCase() }));
 
         try {
             const existedState = await states.findOne({ isDeleted: false, name: state });
@@ -40,7 +40,7 @@ class controller {
         let { state_id, page = 1, limit = 20 } = req.query;
         page = Math.max(1, parseInt(page));
         limit = Math.max(1, parseInt(limit));
-        const filter = {}
+        const filter = { is_deleted: false };
         try {
             if (state_id) {
                 filter._id = state_id
@@ -155,7 +155,7 @@ class controller {
     }
     static async delete(req, res) {
         const { _id, city_index } = req.body;
-    
+
         // Validate required fields
         const missingField = ["_id", "city_index"].filter(field => req.body[field] === undefined);
         if (missingField.length) {
@@ -165,7 +165,7 @@ class controller {
                 data: []
             });
         }
-    
+
         // Validate city_index type
         if (typeof city_index !== 'number') {
             return res.json({
@@ -174,20 +174,20 @@ class controller {
                 data: []
             });
         }
-    
+
         try {
             // Remove the specific city from the array using $unset
             const update = await addCity.updateOne(
                 { _id },
                 { $unset: { [`cities.${city_index}`]: 1 } }
             );
-    
+
             // Shift the remaining elements left using $pull to remove null values
             await addCity.updateOne(
                 { _id },
                 { $pull: { cities: null } }
             );
-    
+
             res.json({
                 success: true,
                 message: 'City deleted successfully',
@@ -201,6 +201,47 @@ class controller {
             });
         }
     }
+
+    static async allCity(req, res) {
+        console.log('allCity');
     
+        try {
+            const cityData = await addCity.find({ is_deleted: false });
+    
+            const stateSet = new Set();
+            const cityMap = {};
+    
+            cityData.forEach(city => {
+                stateSet.add(city.state);
+    
+                city.cities.forEach(arrayCity => {
+                    const key = `${arrayCity.name[0]}_cities`; // Correct variable key format
+                    
+                    if (!cityMap[key]) {
+                        cityMap[key] = [];
+                    }
+                    cityMap[key].push(arrayCity.name);
+                });
+            });
+    
+            res.json({
+                status_code: true,
+                // data: cityData,
+                states: Array.from(stateSet), // Convert Set to an array
+                groupedCities: cityMap
+            });
+    
+        } catch (err) {
+            res.json({
+                status_code: false,
+                message: err.message,
+                data: [],
+                states: [],
+                groupedCities: {}
+            });
+        }
+    }
+    
+
 }
 module.exports = controller;

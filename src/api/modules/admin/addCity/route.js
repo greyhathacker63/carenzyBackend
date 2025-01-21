@@ -7,5 +7,6 @@ router.get('/details',controller.details)
 router.put('/addCity',controller.addCity)
 router.put('/updateCity',controller.updateCity)
 router.delete('/delete',controller.delete)
+router.get('/allCity',controller.allCity)
 
 module.exports= router

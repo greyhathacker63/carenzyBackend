@@ -14,10 +14,15 @@ const stateSchema = new Schema({
         ref: 'states',
         required: true
     },
-    cities: [citySchema]
-}, {
-    timestamps: true,
-    versionKey: false
-});
+    cities: [citySchema],
+    is_deleted: {
+        type: Boolean,
+        default: false
+    },
+},
+    {
+        timestamps: true,
+        versionKey: false
+    });
 
 module.exports = mongoose.model('state_city', stateSchema);
