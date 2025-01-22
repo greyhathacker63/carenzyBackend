@@ -9,7 +9,7 @@ const sellCarSchema = new Schema(
             trim: true
         },
         state: {
-            type: Types.ObjectId,
+            type: String,
             ref: 'States',
             required: true
         },
