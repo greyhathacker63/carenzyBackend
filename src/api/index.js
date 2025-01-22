@@ -76,6 +76,7 @@ const dealerBannerRoute = require("./modules/front/banner/route");
 const dealerSubscriptionRoute = require("./modules/front/subscription/route");
 const notificationRoute = require("./modules/front/notification/route");
 const dealerBidding = require("./modules/front/bidding/route")
+const sellCarRoute = require("./modules/front/sellCar/route");
 
 
 
@@ -195,6 +196,7 @@ const api = (app) => {
     app.use('/dealer/subscription', dealerSubscriptionRoute);
     app.use('/dealer/notification', validateTokenFront, notificationRoute);
     app.use('/dealer/bid', dealerBidding)
+    app.use('/dealer/sell-car', sellCarRoute);
 
     /*
     |--------------------------------------------------------------------------
