@@ -196,7 +196,7 @@ const api = (app) => {
     app.use('/dealer/subscription', dealerSubscriptionRoute);
     app.use('/dealer/notification', validateTokenFront, notificationRoute);
     app.use('/dealer/bid', dealerBidding)
-    app.use('/dealer/sell-car', sellCarRoute);
+    app.use('/dealer/sell-car',validateTokenFront, sellCarRoute);
 
     /*
     |--------------------------------------------------------------------------
