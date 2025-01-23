@@ -48,6 +48,11 @@ const sellCarSchema = new Schema(
             type: Types.ObjectId,
             required: true
         },
+        user_id:{
+            type: Types.ObjectId,
+            required: true,
+            trim: true
+        },
         no_of_owner: {
             type: Number,
             required: true,
