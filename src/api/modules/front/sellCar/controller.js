@@ -1,17 +1,20 @@
 const sellCar = require('../../../../models/sellCar');
+const brandModel = require('../../../../models/brandModel')
+const modelData = require('../../../../models/modelVariant')
+const variantFeature = require('../../../../models/variantSpecFeature')
 
 class Controller {
     static async save(req, res) {
         try {
-            const { name, city, registration_number, make, model, variant, transmission, year, fuel, expected_price, no_of_owner } = req.body;
-            const requiredFields = ["name", "expected_price", "no_of_owner", "fuel", "year", "transmission", "model", "make", "registration_number", "city"];
+            const { name, city, registration_number, make, model, variant, transmission, year, fuel, expected_price, no_of_owner,mobile } = req.body;
+            const requiredFields = ["name", "expected_price", "no_of_owner", "fuel", "year", "transmission", "model", "make", "registration_number", "city","mobile"];
             const missingFields = requiredFields.filter(field => !req.body[field]);
 
             if (missingFields.length) {
                 return res.json({
                     status_code: false,
                     message: `Missing fields: ${missingFields.join(', ')}`,
-                    data:{}
+                    data: {}
                 });
             }
 
@@ -27,7 +30,7 @@ class Controller {
             return res.json({
                 status_code: false,
                 message: error.message,
-                data:{}
+                data: {}
             });
         }
     }
@@ -35,48 +38,42 @@ class Controller {
     static async list(req, res) {
         try {
             let { page = 1, limit = 20, _id } = req.query;
-            const filter = { is_deleted: false };
-
+    
             page = Math.max(1, parseInt(page));
             limit = Math.max(1, parseInt(limit));
-
-            if (_id) {
-                filter._id = _id;
-            }
-
-            const response = await sellCar.aggregate([
-                { $match: filter },
-                {
-                    $facet: {
-                        data: [
-                            { $sort: { createdAt: -1 } },
-                            { $skip: (page - 1) * limit },
-                            { $limit: limit }
-                        ],
-                        total: [{ $count: 'total' }]
-                    }
-                }
+    
+            const errorReturn = (msg) => res.json({ status_code: false, message: msg, data: {} });
+    
+            if (!_id) return errorReturn("Please provide _id");
+    
+            const data = await sellCar.findById(_id);
+            if (!data) return errorReturn("Please provide a correct _id");
+    
+            const [brandModelData, modelDatas, variantFeatureData] = await Promise.all([
+                brandModel.findById(data.make),
+                modelData.findById(data.model),
+                variantFeature.findById(data.variant)
             ]);
-
-            let total = response[0]?.total?.[0]?.total || 0;
-            let data = response[0]?.data || [];
-
-            return res.json({
-                status_code: total > 0,
-                message: total > 0 ? 'Data found' : 'No data found',
-                data: data,
-                total: total
-            });
-
+    
+            if (!brandModelData) return errorReturn("Brand model does not exist");
+            if (!modelDatas) return errorReturn("Model is not found");
+            if (!variantFeatureData) return errorReturn("Variant not found");
+    
+            const responseData = {
+                ...data.toObject(),
+                brand_model_name: brandModelData.name,
+                model_name: modelDatas.name,
+                variant_description: variantFeatureData.description
+            };
+    
+            return res.json({ status_code: true, message: "Data found", data: responseData });
+    
         } catch (error) {
-            return res.json({
-                status_code: false,
-                message:error.message,
-                data: [],
-                total: 0
-            });
+            return res.json({ status_code: false, message: error.message, data: [] });
         }
     }
+    
+
 }
 
 module.exports = Controller;

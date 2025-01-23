@@ -20,7 +20,7 @@ const sellCarSchema = new Schema(
             trim: true
         },
         make: {
-            type: String,
+            type: Types.ObjectId,
             required: true,
             trim: true
         },
@@ -64,6 +64,11 @@ const sellCarSchema = new Schema(
         },
         image: {
             type: [String],
+            trim: true
+        },
+        mobile:{
+            type: String,
+            required: true,
             trim: true
         },
         is_deleted: {
