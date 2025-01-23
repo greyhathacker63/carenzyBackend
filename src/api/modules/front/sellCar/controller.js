@@ -3,8 +3,8 @@ const sellCar = require('../../../../models/sellCar');
 class Controller {
     static async save(req, res) {
         try {
-            const { name, state, city, registration_number, make, model, variant, transmission, year, fuel, expected_price, no_of_owner } = req.body;
-            const requiredFields = ["name", "expected_price", "no_of_owner", "fuel", "year", "transmission", "model", "make", "registration_number", "city", "state"];
+            const { name, city, registration_number, make, model, variant, transmission, year, fuel, expected_price, no_of_owner } = req.body;
+            const requiredFields = ["name", "expected_price", "no_of_owner", "fuel", "year", "transmission", "model", "make", "registration_number", "city"];
             const missingFields = requiredFields.filter(field => !req.body[field]);
 
             if (missingFields.length) {
