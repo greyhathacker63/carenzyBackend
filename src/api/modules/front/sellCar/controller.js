@@ -53,10 +53,14 @@ class Controller {
                     total: 0
                 });
             }
+            const filter ={}
+            if(_id){
+                filter.user_id= new ObjectId(_id) 
+            }
 
             const userData = await sellCar.aggregate([
                 {
-                    $match: { user_id: new ObjectId(_id) }
+                    $match: filter
                 },
                 {
                     $facet: {
