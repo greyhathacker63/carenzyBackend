@@ -1,13 +1,16 @@
 const sellCar = require('../../../../models/sellCar');
 const brandModel = require('../../../../models/brandModel')
 const modelData = require('../../../../models/modelVariant')
-const variantFeature = require('../../../../models/variantSpecFeature')
+const variantFeature = require('../../../../models/variantSpecFeature');
+const dealer = require('../../../../models/dealer')
+const mongoose = require('mongoose')
+const { ObjectId } = require('mongodb');
 
 class Controller {
     static async save(req, res) {
         try {
-            const { name, city, registration_number, make, model, variant, transmission, year, fuel, expected_price, no_of_owner,mobile } = req.body;
-            const requiredFields = ["name", "expected_price", "no_of_owner", "fuel", "year", "transmission", "model", "make", "registration_number", "city","mobile"];
+            const { name, city, registration_number, make, model, variant, transmission, year, fuel, expected_price, no_of_owner, mobile, user_id } = req.body;
+            const requiredFields = ["name", "expected_price", "no_of_owner", "fuel", "year", "transmission", "model", "make", "registration_number", "city", "mobile"];
             const missingFields = requiredFields.filter(field => !req.body[field]);
 
             if (missingFields.length) {
@@ -38,36 +41,45 @@ class Controller {
     static async list(req, res) {
         try {
             let { page = 1, limit = 20, _id } = req.query;
-    
-            page = Math.max(1, parseInt(page));
-            limit = Math.max(1, parseInt(limit));
-    
-            const errorReturn = (msg) => res.json({ status_code: false, message: msg, data: {} });
-    
-            if (!_id) return errorReturn("Please provide _id");
-    
-            const data = await sellCar.findById(_id);
-            if (!data) return errorReturn("Please provide a correct _id");
-    
-            const [brandModelData, modelDatas, variantFeatureData] = await Promise.all([
-                brandModel.findById(data.make),
-                modelData.findById(data.model),
-                variantFeature.findById(data.variant)
+
+            page = Math.max(1, parseInt(page, 10));
+            limit = Math.max(1, parseInt(limit, 10));
+
+            if (!_id || !ObjectId.isValid(_id)) {
+                return res.json({
+                    status_code: false,
+                    message: "Invalid or missing _id",
+                    data: [],
+                    total: 0
+                });
+            }
+
+            const userData = await sellCar.aggregate([
+                {
+                    $match: { user_id: new ObjectId(_id) }
+                },
+                {
+                    $facet: {
+                        paginatedData: [
+                            { $sort: { createdAt: -1 } },
+                            { $skip: (page - 1) * limit },
+                            { $limit: limit }
+                        ],
+                        total: [{ $count: "total" }]
+                    }
+                }
             ]);
-    
-            if (!brandModelData) return errorReturn("Brand model does not exist");
-            if (!modelDatas) return errorReturn("Model is not found");
-            if (!variantFeatureData) return errorReturn("Variant not found");
-    
-            const responseData = {
-                ...data.toObject(),
-                brand_model_name: brandModelData.name,
-                model_name: modelDatas.name,
-                variant_description: variantFeatureData.description
-            };
-    
-            return res.json({ status_code: true, message: "Data found", data: responseData });
-    
+
+            const paginatedData = userData[0]?.paginatedData || [];
+            const total = userData[0]?.total[0]?.total || 0;
+
+            return res.json({
+                status_code: paginatedData.length > 0,
+                message: paginatedData.length > 0 ? "Data fetched successfully" : "No data found",
+                data: paginatedData,
+                total
+            });
+
         } catch (error) {
             return res.json({
                 status_code: false,
@@ -77,8 +89,6 @@ class Controller {
             });
         }
     }
-
-
 
 }
 
