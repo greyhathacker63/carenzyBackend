@@ -8,11 +8,6 @@ const sellCarSchema = new Schema(
             required: true,
             trim: true
         },
-        state: {
-            type: String,
-            ref: 'States',
-            required: true
-        },
         city: {
             type: String,
             required: true,
@@ -50,8 +45,7 @@ const sellCarSchema = new Schema(
             max: new Date().getFullYear()
         },
         fuel: {
-            type: String,
-            enum: ['petrol', 'diesel', 'cng', 'ev', 'hybrid'],
+            type: Types.ObjectId,
             required: true
         },
         no_of_owner: {
