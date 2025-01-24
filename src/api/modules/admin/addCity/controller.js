@@ -1,7 +1,7 @@
 const addCity = require('../../../../models/addCity');
 const states = require('../../../../models/state');
 const Response = require('../../../../utilities/Response');
-const Message = require('../../../../utilities/Message'); 
+const Message = require('../../../../utilities/Message');
 const popularCity = require('../../../../models/popularCity')
 
 class controller {
@@ -204,36 +204,50 @@ class controller {
     }
 
     static async allCity(req, res) {
-    
+
         try {
+            const { name } = req.query
+            if (name) {
+
+                const cities = await addCity.find({ state: name })
+                return res.json({
+                    status_code: cities.length > 0,
+                    message: cities.length > 0 ? "Data fetched sucessfully" : "No data found",
+                    states: cities,
+                    groupedCities: [],
+                    popularCities: [],
+                    allCity: []
+                })
+
+            }
             const cityData = await addCity.find({ is_deleted: false });
-            const popularCities = await popularCity.find({ is_active:true });
-    
+            const popularCities = await popularCity.find({ is_active: true });
+
             const stateSet = new Set();
             const cityMap = {};
             const allCity = []
-    
+
             cityData.forEach(city => {
                 stateSet.add(city.state);
                 city.cities.forEach(arrayCity => {
-                    const key = `${arrayCity.name[0].toLowerCase()}_cities`; 
+                    const key = `${arrayCity.name[0].toLowerCase()}_cities`;
                     allCity.push(arrayCity)
-                    
+
                     if (!cityMap[key]) {
                         cityMap[key] = [];
                     }
                     cityMap[key].push(arrayCity.name);
                 });
             });
-    
+
             res.json({
                 status_code: true,
-                states: Array.from(stateSet), 
+                states: Array.from(stateSet),
                 groupedCities: cityMap,
                 popularCities,
                 allCity
             });
-    
+
         } catch (err) {
             res.json({
                 status_code: false,
@@ -242,7 +256,7 @@ class controller {
                 states: [],
                 groupedCities: {},
                 popularCities: [],
-                allCity:[]
+                allCity: []
             });
         }
     }
@@ -251,16 +265,16 @@ class controller {
     static async createPopular(req, res) {
         try {
             const { city } = req.body;
-    
+
             if (!city) {
                 return res.status(400).json({
                     status_code: false,
                     message: 'Please provide a city',
                 });
             }
-    
+
             const createPopularCity = await popularCity.create({ name: city });
-    
+
             return res.status(201).json({
                 status_code: true,
                 message: 'Popular city created successfully',
@@ -286,7 +300,7 @@ class controller {
         }
 
         try {
-            const deleteResult = await popularCity.findByIdAndUpdate({_id:city_id},{$set:{ is_active: false}});
+            const deleteResult = await popularCity.findByIdAndUpdate({ _id: city_id }, { $set: { is_active: false } });
 
             if (!deleteResult) {
                 return res.json({
@@ -306,8 +320,8 @@ class controller {
             });
         }
     }
-    
-    
+
+
 
 }
 module.exports = controller;
