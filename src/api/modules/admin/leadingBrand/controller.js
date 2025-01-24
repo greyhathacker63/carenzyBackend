@@ -1,32 +1,54 @@
-const {uploadFileToS3}  = require('../../../../utilities/utils')
-const leadingBrand = require('../../../../models/leadingBrand')
+const { uploadFileToS3 } = require('../../../../utilities/utils');
+const leadingBrand = require('../../../../models/leadingBrand');
+
 class Controller {
     static async save(req, res) {
         try {
-            if (!req.files || req.files.length === 0) {
-                return res.status(400).json({ error: "No files uploaded" });
+            const { name } = req.body
+            // if (!name) {
+            //     return res.json({
+            //         status_code: false,
+            //         message: "Please provide name",
+            //         data: {}
+            //     })
+            // }
+            if (!req.file) {
+                return res.json({
+                    status_code: false,
+                    message: "No file uploaded",
+                    data: {}
+                });
             }
-
-            const { file_name } = req.body;
-
-            // Upload all files and store URLs
-                    const a = uploadFileToS3(files.req,"toyo")
+            const fileUrl = await uploadFileToS3(req.file, "toyo");
+            const createLeaderBrand = await leadingBrand.create({ logo: fileUrl, name: name })
 
             res.json({
-                message: "Files uploaded successfully",
-                data: a
+                status_code: true,
+                message: "File uploaded successfully",
+                data: createLeaderBrand
             });
         } catch (error) {
             console.error("Upload error:", error);
-            res.status(500).json({message: error.message});
+            res.json({
+                status_code: false,
+                message: error.message,
+                data: {}
+            });
         }
     }
-static async detail(req,res){
-    const data = await leadingBrand.find()
-    res.json({
-        status_code: true,
-        data : data
-    })
-}}
+
+    static async detail(req, res) {
+        try {
+            const data = await leadingBrand.find();
+            res.json({
+                status_code: true,
+                data: data
+            });
+        } catch (error) {
+            console.error("Detail fetch error:", error);
+            res.status(500).json({ message: error.message });
+        }
+    }
+}
 
 module.exports = Controller;
