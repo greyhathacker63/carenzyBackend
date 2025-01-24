@@ -45,6 +45,7 @@ const adminSubscriptionRoute = require("./modules/admin/subscription/route");
 const adminDealerDataVerify = require("./modules/admin/dealer_data_verify/route");
 const promoMediaRoute = require('./modules/admin/promoMedia/route')
 const addCityRoute = require('./modules/admin/addCity/route')
+const leadingBrandRoute = require('./modules/admin/leadingBrand/route')
 
 
 /*
@@ -165,6 +166,7 @@ const api = (app) => {
     app.use('/admin/data-verify', adminDealerDataVerify);
     app.use('/admin/promo-media', promoMediaRoute)
     app.use('/admin/addCity', addCityRoute)
+    app.use('/admin/leadingBrand', leadingBrandRoute)
 
     /*
     |--------------------------------------------------------------------------
