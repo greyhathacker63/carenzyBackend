@@ -197,9 +197,9 @@ const validations = {
     },
     updateDealerFront: [
 
-        check('name')
-            .trim()
-            .notEmpty().withMessage("Please enter name"),
+        // check('name')
+        //     .trim()
+        //     .notEmpty().withMessage("Please enter name"),
 
         // check('rtoId')
         //     .trim()

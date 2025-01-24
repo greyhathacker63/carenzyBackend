@@ -159,7 +159,9 @@ class controller {
 	static async dealerUpdate(req, res) {
 		try {
 			const response = { data: null, message: Message.badRequest.message, code: Message.badRequest.code, extra: {} };
-			const crzNumber = req.__cuser.crz ? req.__cuser.crz : await dealerService.generateNextCRZNumber();
+			// const crzNumber = req.__cuser.crz ? req.__cuser.crz : await dealerService.generateNextCRZNumber();
+			const crzNumber = req.__cuser.crz ? req.__cuser.crz : null
+
 			const srvRes = await dealerService.dealerUpdate({ crz: crzNumber, ...JSON.parse(JSON.stringify(req.__cuser)), ...req.body, _id: req.__cuser._id });
 			if (srvRes.status) {
 				response.message = Message.profileUpdate.message;
