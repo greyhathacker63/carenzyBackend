@@ -8,5 +8,8 @@ router.put('/addCity',controller.addCity)
 router.put('/updateCity',controller.updateCity)
 router.delete('/delete',controller.delete)
 router.get('/allCity',controller.allCity)
+router.post('/createPopular',controller.createPopular)
+router.put('/deletePopular',controller.deletePopular)
+
 
 module.exports= router

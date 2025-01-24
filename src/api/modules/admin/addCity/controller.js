@@ -1,7 +1,8 @@
 const addCity = require('../../../../models/addCity');
 const states = require('../../../../models/state');
 const Response = require('../../../../utilities/Response');
-const Message = require('../../../../utilities/Message');
+const Message = require('../../../../utilities/Message'); 
+const popularCity = require('../../../../models/popularCity')
 
 class controller {
     static async save(req, res) {
@@ -206,15 +207,17 @@ class controller {
     
         try {
             const cityData = await addCity.find({ is_deleted: false });
+            const popularCities = await popularCity.find({ is_active:true });
     
             const stateSet = new Set();
             const cityMap = {};
+            const allCity = []
     
             cityData.forEach(city => {
                 stateSet.add(city.state);
-    
                 city.cities.forEach(arrayCity => {
-                    const key = `${arrayCity.name[0].toLowerCase()}_cities`; // Correct variable key format
+                    const key = `${arrayCity.name[0].toLowerCase()}_cities`; 
+                    allCity.push(arrayCity)
                     
                     if (!cityMap[key]) {
                         cityMap[key] = [];
@@ -225,9 +228,10 @@ class controller {
     
             res.json({
                 status_code: true,
-                // data: cityData,
-                states: Array.from(stateSet), // Convert Set to an array
-                groupedCities: cityMap
+                states: Array.from(stateSet), 
+                groupedCities: cityMap,
+                popularCities,
+                allCity
             });
     
         } catch (err) {
@@ -236,10 +240,73 @@ class controller {
                 message: err.message,
                 data: [],
                 states: [],
-                groupedCities: {}
+                groupedCities: {},
+                popularCities: [],
+                allCity:[]
             });
         }
     }
+
+
+    static async createPopular(req, res) {
+        try {
+            const { city } = req.body;
+    
+            if (!city) {
+                return res.status(400).json({
+                    status_code: false,
+                    message: 'Please provide a city',
+                });
+            }
+    
+            const createPopularCity = await popularCity.create({ name: city });
+    
+            return res.status(201).json({
+                status_code: true,
+                message: 'Popular city created successfully',
+                data: createPopularCity,
+            });
+        } catch (error) {
+            return res.status(500).json({
+                status_code: false,
+                message: error.message || 'Internal Server Error',
+            });
+        }
+    }
+
+
+    static async deletePopular(req, res) {
+        const { city_id } = req.body;
+
+        if (!city_id) {
+            return res.json({
+                status_code: false,
+                message: 'Please provide a city ID',
+            });
+        }
+
+        try {
+            const deleteResult = await popularCity.findByIdAndUpdate({_id:city_id},{$set:{ is_active: false}});
+
+            if (!deleteResult) {
+                return res.json({
+                    status_code: false,
+                    message: 'Please provide correct city_id',
+                });
+            }
+
+            return res.json({
+                status_code: true,
+                message: 'Popular city deleted successfully',
+            });
+        } catch (error) {
+            return res.json({
+                status_code: false,
+                message: error.message || 'Internal Server Error',
+            });
+        }
+    }
+    
     
 
 }
