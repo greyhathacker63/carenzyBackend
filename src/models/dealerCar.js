@@ -229,10 +229,10 @@ const dealerCarSchema = new mongoose.Schema({
 	// 	type: String,
 	// 	trim: true,
 	// },
-	// reportDescription: {
-	// 	type: String,
-	// 	trim: true,
-	// },
+	reportDescription: {
+		type: String,
+		trim: true,
+	},
 	status: {
 		type: String,
 		enum: ["In List", "Sold", "Paused", "Inactive", "Removed"],

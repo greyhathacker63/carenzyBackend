@@ -1155,6 +1155,8 @@ class dealerCarMarketPlaceServices {
 						startTime: 1,
 						endTime: 1,
 						rtoName: "$marketCarDetails.rtoName",
+						reportDescription:  "$marketCarDetails.reportDescription",
+						insuranceDate: "$marketCarDetails.insuranceDate",
 						rtoCode: "$marketCarDetails.rtoCode",
 						dealerCarId: "$marketCarDetails._id",
 						brandName: "$marketCarDetails.brandName",
