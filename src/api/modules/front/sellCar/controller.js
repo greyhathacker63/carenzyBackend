@@ -45,14 +45,6 @@ class Controller {
             page = Math.max(1, parseInt(page, 10));
             limit = Math.max(1, parseInt(limit, 10));
 
-            if (!_id || !ObjectId.isValid(_id)) {
-                return res.json({
-                    status_code: false,
-                    message: "Invalid or missing _id",
-                    data: [],
-                    total: 0
-                });
-            }
             const filter ={}
             if(_id){
                 filter.user_id= new ObjectId(_id) 
