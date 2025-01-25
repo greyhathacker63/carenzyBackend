@@ -16,8 +16,8 @@ const dealerSchema = new Schema({
         }
     ],
     stateId: {
-        type: Schema.Types.ObjectId,
-        ref: "states"
+        type: String,
+        // ref: "states"
     },
     lastGeneralNotificationId: {
         type: Schema.Types.ObjectId,
