@@ -145,43 +145,71 @@ class PollController {
 
     static async edit(req, res) {
         try {
-            let { _id, question, is_deleted, ans_position, answer } = req.body;
-            const filter = {}
+            const { _id, question, is_deleted, ans_position, answer } = req.body;
 
-            if (is_deleted) {
-                filter.is_deleted = is_deleted
-            }
-            if (question) {
-                filter.question = question
-            }
-            if (answer) {
-                filter[`answers.${ans_position}.answer`] = answer;
+            if (!_id) {
+                return res.json({
+                    status_code: false,
+                    message: "Please provide _id",
+                    data: {},
+                });
             }
 
-            const poll = await Poll.findByIdAndUpdate(_id, { $set: filter }, { new: true })
+            if (is_deleted !== undefined && typeof is_deleted !== "boolean") {
+                return res.json({
+                    status_code: false,
+                    message: "Please provide is_deleted as either true or false",
+                });
+            }
+
+            const filter = {};
+            if (is_deleted !== undefined) filter.is_deleted = is_deleted;
+            if (question) filter.question = question;
+
+            if (answer !== undefined && ans_position !== undefined) {
+                const position = Number(ans_position);
+                if (position < 0 || position > 3) {
+                    return res.json({
+                        status_code: false,
+                        message: "Please provide ans_position from 0 to 3",
+                    });
+                }
+                filter[`answers.${position}.answer`] = answer;
+            }
+
+            if (Object.keys(filter).length === 0) {
+                return res.json({
+                    status_code: false,
+                    message: "Please provide at least one field to update",
+                });
+            }
+
+            const poll = await Poll.findByIdAndUpdate(_id, { $set: filter }, { new: true });
 
             if (!poll) {
                 return res.json({
                     status_code: false,
                     message: "Poll not found, please provide a correct _id",
-                    data: null,
+                    data: {},
                 });
             }
 
             res.json({
                 status_code: true,
-                message: "Poll update sucessfully",
+                message: "Poll updated successfully",
                 data: poll,
             });
 
         } catch (error) {
             res.json({
                 status_code: false,
-                message: error.message || "An error occurred while fetching poll data.",
+                message: error.message || "An error occurred while updating the poll.",
                 data: {},
             });
         }
     }
+
+
 
 
 }
