@@ -51,6 +51,11 @@ class PollController {
 
             const polls = await Poll.aggregate([
                 {
+                    $match: {
+                        is_deleted: false
+                    }
+                },
+                {
                     $facet: {
                         paginatedData: [
                             {
