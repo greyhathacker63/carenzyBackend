@@ -47,6 +47,7 @@ const promoMediaRoute = require('./modules/admin/promoMedia/route')
 const addCityRoute = require('./modules/admin/addCity/route')
 const leadingBrandRoute = require('./modules/admin/leadingBrand/route')
 const poolRoute = require('./modules/admin/poll/route')
+const partnerSaysRoute = require('./modules/admin/partnerSays/route')
 
 /*
 |--------------------------------------------------------------------------
@@ -168,6 +169,7 @@ const api = (app) => {
     app.use('/admin/addCity', addCityRoute)
     app.use('/admin/leadingBrand', leadingBrandRoute)
     app.use('/admin/pool', poolRoute)
+    app.use('/admin/partnerSays', partnerSaysRoute)
 
 
     /*

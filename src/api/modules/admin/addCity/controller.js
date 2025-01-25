@@ -83,29 +83,46 @@ class controller {
 
     static async addCity(req, res) {
         const { _id, city } = req.body;
-        const missingField = ["_id", "city"].filter(field => !req.body[field]);
-        if (missingField.length) {
+    
+        const missingFields = ["_id", "city"].filter(field => !req.body[field]);
+        if (missingFields.length) {
             return res.json({
                 status_code: false,
-                message: 'Please provide ' + missingField.join(', '),
+                message: `Please provide ${missingFields.join(", ")}`,
                 data: []
-            })
-        }
-
-        try {
-            const updateCity = await addCity.findOneAndUpdate({ _id }, { $push: { cities: { name: city } } }, { new: true });
-            if (!updateCity) {
-                return Response.fail(res, Response.createError(Message.validationError, 'Please provide correct state id'));
-            }
-            return Response.success(res, {
-                message: 'Data updated successfully',
-                data: updateCity
             });
+        }
+    
+        try {
+            const updatedCity = await addCity.findOneAndUpdate(
+                { _id },
+                { $push: { cities: { name: city } } },
+                { new: true }
+            );
+    
+            if (!updatedCity) {
+                return res.json({
+                    status_code: false,
+                    message: "Please provide a valid _id",
+                    data: []
+                });
+            }
+    
+            res.json({
+                status_code: true, 
+                message: "City added successfully",
+                data: updatedCity 
+            });
+    
         } catch (err) {
-            console.error('Error updating data:', err);
-            return Response.fail(res, Response.createError(Message, 'An error occurred while updating data'));
+            res.json({
+                status_code: false,
+                message: err.message || "An error occurred while adding the city",
+                data: []
+            });
         }
     }
+    
 
     static async updateCity(req, res) {
         const { _id, city_index, city } = req.body;
