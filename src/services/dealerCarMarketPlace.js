@@ -990,7 +990,6 @@ class dealerCarMarketPlaceServices {
 									]
 								}
 							},
-							{ $unwind: { path: "$dealerDetails" } },
 							{
 								$lookup: {
 									from: 'brands',
@@ -1007,6 +1006,8 @@ class dealerCarMarketPlaceServices {
 								}
 							},
 							{ $unwind: { path: '$brandDetail', preserveNullAndEmptyArrays: true } },
+							{ $unwind: { path: "$dealerDetails" } },
+
 							{
 								$lookup: {
 									from: 'brand_models',
@@ -1086,6 +1087,7 @@ class dealerCarMarketPlaceServices {
 									]
 								}
 							},
+
 							{ $unwind: { path: '$rtoDetail', preserveNullAndEmptyArrays: false } },
 							{
 								$project: {
@@ -1097,6 +1099,7 @@ class dealerCarMarketPlaceServices {
 									fuelTypes: "$fuelTypes.name",
 									cityName: "$cityDetail.name",
 									kmsDriven: 1,
+									reportDescription: 1,
 									paintedPiecesCount: 1,
 									registrationNumber: {
 										$concat: [
@@ -1117,6 +1120,7 @@ class dealerCarMarketPlaceServices {
 									exteriorImageVideos: 1,
 									interiorImageVideos: 1,
 									engineImageVideos: 1,
+									insuranceDate: 1,
 									isOwner: {
 										$cond: [
 											{ $eq: ["$dealerId", query.requestingDealerId] },
@@ -1155,7 +1159,7 @@ class dealerCarMarketPlaceServices {
 						startTime: 1,
 						endTime: 1,
 						rtoName: "$marketCarDetails.rtoName",
-						reportDescription:  "$marketCarDetails.reportDescription",
+						reportDescription: "$marketCarDetails.reportDescription",
 						insuranceDate: "$marketCarDetails.insuranceDate",
 						rtoCode: "$marketCarDetails.rtoCode",
 						dealerCarId: "$marketCarDetails._id",
