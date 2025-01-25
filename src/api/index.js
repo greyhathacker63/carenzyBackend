@@ -46,7 +46,7 @@ const adminDealerDataVerify = require("./modules/admin/dealer_data_verify/route"
 const promoMediaRoute = require('./modules/admin/promoMedia/route')
 const addCityRoute = require('./modules/admin/addCity/route')
 const leadingBrandRoute = require('./modules/admin/leadingBrand/route')
-
+const poolRoute = require('./modules/admin/poll/route')
 
 /*
 |--------------------------------------------------------------------------
@@ -89,7 +89,7 @@ const sellCarRoute = require("./modules/front/sellCar/route");
 
 const blogRoute = require('./modules/blog/blog/route');
 const commonRoute = require('./modules/common/route');
-const pollRoute = require('./modules/poll/route')
+const pollRoute = require('./modules/admin/poll/route')
 const firebaseService = require('./../services/firebase');
 
 const api = (app) => {
@@ -167,6 +167,8 @@ const api = (app) => {
     app.use('/admin/promo-media', promoMediaRoute)
     app.use('/admin/addCity', addCityRoute)
     app.use('/admin/leadingBrand', leadingBrandRoute)
+    app.use('/admin/pool', poolRoute)
+
 
     /*
     |--------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-const Poll = require('../../../models/poll');
+const Poll = require('../../../../models/poll');
 
 class PollController {
     static async save(req, res) {
@@ -45,61 +45,57 @@ class PollController {
     }
     static async detail(req, res) {
         try {
-            let { _id, page = 1, limit = 20 } = req.query;
-            page = Number(page);
-            limit = Number(limit);
+            let { page = 1, limit = 20 } = req.query;
+            page = Math.max(1, Number(page))
+            limit = Math.max(1, Number(limit));
 
-            if (!_id) {
-                const polls = await Poll.find({ is_deleted: false })
-                    .skip((page - 1) * limit)
-                    .limit(limit)
-                    .lean();
+            const polls = await Poll.aggregate([
+                {
+                    $facet: {
+                        paginatedData: [
+                            {
+                                $sort: {
+                                    updatedAt: -1
+                                }
+                            },
+                            {
+                                $skip: (page - 1) * limit
+                            },
+                            {
+                                $limit: limit
+                            },
+                        ],
+                        total: [
+                            {
+                                $count: 'total'
+                            }
+                        ]
+                    }
+                }
+            ]);
+            const data = polls[0]?.paginatedData
+            const total = polls[0]?.total[0]?.total
 
-                const totalPolls = await Poll.countDocuments({ is_deleted: false });
-
-                return res.json({
-                    status_code: true,
-                    message: "Polls fetched successfully",
-                    data: polls,
-                    pagination: {
-                        total: totalPolls,
-                        page,
-                        limit,
-                        totalPages: Math.ceil(totalPolls / limit),
-                    },
-                });
-            }
-
-            const poll = await Poll.findById(_id).lean();
-
-            if (!poll) {
-                return res.json({
-                    status_code: false,
-                    message: "Poll not found, please provide a correct _id",
-                    data: null,
-                });
-            }
-
-            res.json({
-                status_code: true,
-                message: "Poll fetched successfully",
-                data: poll,
+            return res.json({
+                status_code: total > 0,
+                message: total > 0 ? "Polls fetched successfully" : "No data found",
+                data: data,
                 pagination: {
-                    total: poll.length,
+                    total: total,
                     page,
                     limit,
-                    totalPages: Math.ceil(poll.length / limit),
+                    totalPages: Math.ceil(total / limit),
                 },
             });
-
         } catch (error) {
             res.json({
                 status_code: false,
-                message: error.message || "An error occurred while fetching poll data.",
+                message: error.message,
                 data: {},
             });
         }
     }
+
 
 
     static async increaseCount(req, res) {
