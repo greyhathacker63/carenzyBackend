@@ -41,7 +41,8 @@ class bannerServices {
                         status: 1,
                         redirectUrl: 1,
                         index: 1,
-                        visibleTo: 1
+                        visibleTo: 1,
+                        is_app: 1
                     }
                 },
             ];
@@ -98,6 +99,7 @@ class bannerServices {
             docData.index = data.index;
             docData.visibleTo = data.visibleTo;
             docData.status = data.status;
+            docData.is_app = data.is_app;
 
             await docData.save();
 

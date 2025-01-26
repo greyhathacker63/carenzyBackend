@@ -3,7 +3,7 @@ const BannerSchema = new mongoose.Schema(
 	{
 		position: {
 			type: String,
-			enum: ["home", "bidding", "market"],
+			enum: ["home", "bidding", "market", "leads"],
 		},
 		visibleTo: {
 			type: String,
@@ -28,6 +28,10 @@ const BannerSchema = new mongoose.Schema(
 			type: Boolean,
 			default: false,
 		},
+		is_app:{
+			type: Boolean,
+			required: true
+		}
 	},
 	{ timestamps: true }
 );
