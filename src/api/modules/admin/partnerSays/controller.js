@@ -37,7 +37,29 @@ class Controller {
         page = Math.max(1, Number(page));
         limit = Math.max(1, Number(limit));
 
-        const allPartnerSays = await partnerSays.find().sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit);
+        const allPartnerSays = await partnerSays.aggregate([
+          {
+            $lookup:{
+              from: 'dealers',
+              localField: 'dealer_id',
+              foreignField: '_id',
+              as: 'dealerData'
+            }
+          },{
+            $unwind:'$dealerData'
+          },{
+            $project: {
+              _id:0,
+              avatar: '$dealerData.avatar',
+              name: "$dealerData.name",
+              dealer_id: 1,
+              description:1,
+              createdAt: 1
+            }
+          }
+        ])
+
+        // const allPartnerSays = await partnerSays.find().sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit);
 
         res.json({
             status_code: allPartnerSays.length > 0,
@@ -53,6 +75,21 @@ class Controller {
     }
 }
 
+// static async delete(req,res){
+//   const {_id}= req.query
+//   if(!_id){
+//     return res.json({
+//       status_code: false,
+//       message : "Please provide _id"
+//     })
+//   }
+//   const deleteData = await partnerSays.findByIdAndDelete({_id})
+//   if(!deleteData){
+//     return res.json({
+//       status_code: false
+//     })
+//   }
+// }
 
 }
 
