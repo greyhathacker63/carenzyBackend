@@ -150,7 +150,7 @@ class PollController {
 
     static async edit(req, res) {
         try {
-            const { _id, question, is_deleted, ans_position, answer } = req.body;
+            const { _id, question, is_deleted, ans_position, answers } = req.body;
 
             if (!_id) {
                 return res.json({
@@ -171,6 +171,7 @@ class PollController {
             if (is_deleted !== undefined) filter.is_deleted = is_deleted;
             if (question) filter.question = question;
     
+
             if (Array.isArray(answers)) {
                 answers.forEach(({ ans_position, answer }) => {
                     const position = Number(ans_position);
