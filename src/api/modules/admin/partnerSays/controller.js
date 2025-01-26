@@ -1,3 +1,4 @@
+const { toPath } = require('lodash');
 const partnerSays = require('../../../../models/partnerSays');
 
 class Controller {
@@ -56,15 +57,38 @@ class Controller {
               description:1,
               createdAt: 1
             }
+          },{
+            $facet:{
+              paginatedData:[
+                {
+                  $sort:{
+                    updatedAt:-1
+                  },
+                },
+                {
+                  $skip: (page-1)*limit
+                },
+                {
+                  $limit: limit
+                }
+              ],
+              total:[
+                {
+                  $count: 'total'
+                }
+              ]
+            }
           }
         ])
+        const data = allPartnerSays[0]?.paginatedData
+        const total = allPartnerSays[0]?.total[0]?.total
 
-        // const allPartnerSays = await partnerSays.find().sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit);
 
         res.json({
-            status_code: allPartnerSays.length > 0,
-            message: allPartnerSays.length > 0 ? "Data fetched successfully" : "No data found",
-            data: allPartnerSays
+            status_code: !!total,
+            message: total ? "Data fetched successfully" : "No data found",
+            data,
+            total: total || 0
         });
     } catch (error) {
         res.json({
