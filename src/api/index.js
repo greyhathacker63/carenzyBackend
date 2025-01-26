@@ -48,7 +48,7 @@ const addCityRoute = require('./modules/admin/addCity/route')
 const leadingBrandRoute = require('./modules/admin/leadingBrand/route')
 const poolRoute = require('./modules/admin/poll/route')
 const partnerSaysRoute = require('./modules/admin/partnerSays/route')
-
+const testimonialRoute = require('./modules/front/testimonital/route')
 /*
 |--------------------------------------------------------------------------
 |  Dealer routes import
@@ -228,6 +228,15 @@ const api = (app) => {
 |--------------------------------------------------------------------------
 */
     app.use('/poll', pollRoute)
+
+
+       /*
+|--------------------------------------------------------------------------
+|  Testimonial Routes
+|--------------------------------------------------------------------------
+*/
+
+app.use('/testimonial', testimonialRoute)
 
 
 };
