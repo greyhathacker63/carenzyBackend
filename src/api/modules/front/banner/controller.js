@@ -18,8 +18,33 @@ class bannerController {
             } else {
                 visibleTo.push("Verified / Complete Accounts");
             }
+            if (!req.query.position) {
+                return res.json({
+                     success: false,
+                     message: "Please provide position",
+                     data: [],
+                     extra: {
+                         page: 1,
+                         limit: 0,
+                         total: 0
+                     }
+                 })
+             }
+             const checkPosition = ["home", "bidding", "market", "leads"];
+             if (!checkPosition.includes(req.query.position)) {
+                 return res.json({
+                     success: false,
+                     message: "Please provide correct value of position",
+                     data: [],
+                     extra: {
+                         page: 1,
+                         limit: 0,
+                         total: 0
+                     }
+                 });
+             }
 
-            const srvRes = await BannerServices.listFront({ visibleTo, position: req.params.position, isAll: 1 });
+            const srvRes = await BannerServices.listFront({ visibleTo, position: req.query.position, isAll: 1 });
             if (srvRes.data.length) {
                 response.data = srvRes.data;
                 response.message = Message.dataFound.message;

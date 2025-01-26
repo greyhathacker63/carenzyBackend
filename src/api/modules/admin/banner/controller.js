@@ -23,6 +23,31 @@ class bannerController {
     static async bannerList(req, res) {
         try {
             const response = { data: [], message: Message.noContent.message, code: Message.noContent.code, extra: {} };
+            if (!req.query.position) {
+               return res.json({
+                    success: false,
+                    message: "Please provide position",
+                    data: [],
+                    extra: {
+                        page: 1,
+                        limit: 0,
+                        total: 0
+                    }
+                })
+            }
+            const checkPosition = ["home", "bidding", "market", "leads"];
+            if (!checkPosition.includes(req.query.position)) {
+                return res.json({
+                    success: false,
+                    message: "Please provide correct value of position",
+                    data: [],
+                    extra: {
+                        page: 1,
+                        limit: 0,
+                        total: 0
+                    }
+                });
+            }
             const srvRes = await bannerService.list(req.query);
             if (srvRes.data.length) {
                 response.data = srvRes.data;
