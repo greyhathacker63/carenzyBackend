@@ -30,6 +30,7 @@ class MasterService {
                         url: 1,
                         description: 1,
                         isDeleted: 1,
+                        thumbnail: 1,
                         createdAt: 1,
                         updatedAt: 1
                     }

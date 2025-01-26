@@ -13,6 +13,9 @@ const testimonialSchema = new Schema({
     type: {
         type: String
     },
+    thumbnail: {
+        type: String
+    },
     isDeleted: {
         type: Boolean,
         default: false
