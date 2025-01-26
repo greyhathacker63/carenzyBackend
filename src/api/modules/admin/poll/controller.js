@@ -166,31 +166,33 @@ class PollController {
                     message: "Please provide is_deleted as either true or false",
                 });
             }
-
+    
             const filter = {};
             if (is_deleted !== undefined) filter.is_deleted = is_deleted;
             if (question) filter.question = question;
-
-            if (answer !== undefined && ans_position !== undefined) {
-                const position = Number(ans_position);
-                if (position < 0 || position > 3) {
-                    return res.json({
-                        status_code: false,
-                        message: "Please provide ans_position from 0 to 3",
-                    });
-                }
-                filter[`answers.${position}.answer`] = answer;
+    
+            if (Array.isArray(answers)) {
+                answers.forEach(({ ans_position, answer }) => {
+                    const position = Number(ans_position);
+                    if (position < 0 || position > 3) {
+                        return res.json({
+                            status_code: false,
+                            message: `Invalid ans_position: ${position}. It should be between 0 to 3.`,
+                        });
+                    }
+                    filter[`answers.${position}.answer`] = answer;
+                });
             }
-
+    
             if (Object.keys(filter).length === 0) {
                 return res.json({
                     status_code: false,
                     message: "Please provide at least one field to update",
                 });
             }
-
+    
             const poll = await Poll.findByIdAndUpdate(_id, { $set: filter }, { new: true });
-
+    
             if (!poll) {
                 return res.json({
                     status_code: false,
@@ -198,13 +200,13 @@ class PollController {
                     data: {},
                 });
             }
-
+    
             res.json({
                 status_code: true,
                 message: "Poll updated successfully",
                 data: poll,
             });
-
+    
         } catch (error) {
             res.json({
                 status_code: false,
@@ -213,10 +215,7 @@ class PollController {
             });
         }
     }
-
-
-
-
+    
 }
 
 module.exports = PollController;
