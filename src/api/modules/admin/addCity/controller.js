@@ -284,7 +284,7 @@ class controller {
             const { city } = req.body;
 
             if (!city) {
-                return res.status(400).json({
+                return res.json({
                     status_code: false,
                     message: 'Please provide a city',
                 });
@@ -292,13 +292,13 @@ class controller {
 
             const createPopularCity = await popularCity.create({ name: city });
 
-            return res.status(201).json({
+            return res.json({
                 status_code: true,
                 message: 'Popular city created successfully',
                 data: createPopularCity,
             });
         } catch (error) {
-            return res.status(500).json({
+            return res.json({
                 status_code: false,
                 message: error.message || 'Internal Server Error',
             });

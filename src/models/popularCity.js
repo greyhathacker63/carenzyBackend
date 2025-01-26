@@ -9,6 +9,9 @@ const popularCitySchema = new mongoose.Schema({
         type: Boolean,
         default: true,
     },
+    image :{
+        type :String
+    }
 }, {
     versionKey: false,
 });
