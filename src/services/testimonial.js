@@ -14,14 +14,14 @@ class MasterService {
 
         try {
             const search = {
-                type: query.type, // Add search filter for type
+                type: query.type,
                 isDeleted: false
             };
-        
-             clearSearch(search);
-        
+
+            clearSearch(search);
+
             const $aggregate = [
-                { $match: search }, // Apply the search filter
+                { $match: search },
                 { $sort: { updatedAt: -1 } },
                 {
                     $project: {
@@ -34,16 +34,49 @@ class MasterService {
                         createdAt: 1,
                         updatedAt: 1
                     }
+                },
+                {
+                    $lookup: {
+                        from: 'dealers',
+                        localField: 'userId',
+                        foreignField: "_id",
+                        as: "dealerData",
+                        pipeline: [
+                            {
+                                $project: {
+                                    _id: 0,
+                                    name: 1
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$dealerData',
+                        preserveNullAndEmptyArrays: true
+                    }
+                }, {
+                    $project: {
+                        userId: '$dealerData.name',
+                        type: 1,
+                        url: 1,
+                        description: 1,
+                        isDeleted: 1,
+                        thumbnail: 1,
+                        createdAt: 1,
+                        updatedAt: 1
+                    }
                 }
             ];
-        
+
             response = await paginationAggregate(testimonialModel, $aggregate, $extra);
             response.status = true;
             return response;
         } catch (err) {
             throw err;
         }
-        
+
     }
 
 

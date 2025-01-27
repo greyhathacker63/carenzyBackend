@@ -1,28 +1,35 @@
-const { Schema, model, } = require('mongoose');
+const mongoose = require('mongoose');
+const { Schema, Types, model } = mongoose;
 
 const testimonialSchema = new Schema({
     userId: {
-        type: String
+        type: Types.ObjectId,
+        ref: 'dealer',
+        required: [true, "Please provide userId"],
+        trim: true
     },
     url: {
-        type: String
+        type: String,
+        trim: true
     },
     description: {
-        type: String
+        type: String,
+        trim: true
     },
     type: {
-        type: String
+        type: String,
+        enum: ["customer", "dealer"],
+        required: [true, "Please provide type"],
+        trim: true
     },
     thumbnail: {
-        type: String
+        type: String,
+        trim: true
     },
     isDeleted: {
         type: Boolean,
         default: false
     }
-
 }, { timestamps: true });
 
-
-const testimonialModel = model('testimonials', testimonialSchema);
-module.exports = testimonialModel;
+module.exports = model('Testimonial', testimonialSchema);
