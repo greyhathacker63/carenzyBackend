@@ -15,7 +15,6 @@ const sellCarSchema = new Schema(
         },
         registration_number: {
             type: String,
-            unique: true,
             uppercase: true,
             trim: true
         },
