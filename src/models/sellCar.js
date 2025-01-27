@@ -19,17 +19,17 @@ const sellCarSchema = new Schema(
             trim: true
         },
         make: {
-            type: String,
+            type: Types.ObjectId,
             required: true,
             trim: true
         },
         model: {
-            type: String,
+            type: Types.ObjectId,
             required: true,
             trim: true
         },
         variant: {
-            type: String,
+            type: Types.ObjectId,
             trim: true
         },
         transmission: {
