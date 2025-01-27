@@ -130,6 +130,42 @@ class controller {
 			});
 		}
 	}
+
+	static async delete(req, res) {
+		const { _id } = req.body
+
+		if (!_id) {
+			return res.json({
+				status_code: false,
+				message: "Please provide _id",
+				data: {}
+			})
+		}
+		try {
+			const deleteData = await Testimonial.findByIdAndDelete(_id);
+
+			if (!deleteData) {
+				return res.json({
+					status_code: false,
+					message: "Testimonial not found",
+					data: {}
+				});
+			}
+
+			res.json({
+				status_code: true,
+				message: "Testimonial deleted successfully",
+				data: deleteData
+			});
+		}
+		catch (error) {
+			res.json({
+				status_code: false,
+				message: error.message,
+				data: {}
+			})
+		}
+	}
 }
 
 module.exports = controller;

@@ -45,7 +45,7 @@ class Controller {
             page = Math.max(1, parseInt(page, 10));
             limit = Math.max(1, parseInt(limit, 10));
 
-            const filter = {}
+            const filter = { is_deleted: false }
             if (_id) {
                 filter.user_id = new ObjectId(_id)
             }
@@ -178,6 +178,48 @@ class Controller {
                 total: 0
             });
         }
+    }
+
+    static async delete(req, res) {
+        const {_id,is_deleted} = req.body
+    try {
+      
+        const missingFields = ["_id"].filter(field => !req.body[field]);
+
+        if (missingFields.length) {
+            return res.json({
+                status_code: false,
+                message: `Missing fields: ${missingFields.join(', ')}`,
+                data: {}
+            });
+        }
+
+        const result = await sellCar.updateOne(
+        { _id: new ObjectId(_id) },
+        { $set: { is_deleted: is_deleted } }
+        );
+
+        if (result.nModified === 0) {
+        return res.json({
+            status_code: false,
+            message: "Car not found or already deleted",
+            data: {}
+        });
+        }
+
+        return res.json({
+        status_code: true,
+        message: "Car deleted successfully",
+        data: {}
+        });
+
+    } catch (error) {
+        return res.json({
+        status_code: false,
+        message: error.message,
+        data: {}
+        });
+    }
     }
 
 }
