@@ -50,7 +50,6 @@ class Controller {
                 filter.user_id = new ObjectId(_id)
             }
 
-            console.log("filter", filter)
             const userData = await sellCar.aggregate([
                 {
                     $match: filter
