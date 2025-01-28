@@ -50,7 +50,6 @@ class Controller {
           $unwind: '$dealerData'
         }, {
           $project: {
-            _id: 0,
             avatar: '$dealerData.avatar',
             name: "$dealerData.name",
             dealer_id: 1,
