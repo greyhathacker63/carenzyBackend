@@ -131,6 +131,51 @@ class Controller {
     }
   }
 
+  static async edit(req, res) {
+    const { _id, dealer_id, description } = req.body;
+    if (!_id) {
+      return res.json({
+        status: false,
+        message: "Please provide _id",
+        data: {}
+      });
+    }
+    try {
+      const filter = {};
+      if (dealer_id) filter.dealer_id = dealer_id;
+      if (description) filter.description = description;
+
+      if (!Object.keys(filter).length) {
+        return res.json({
+          status: false,
+          message: "Please provide any key to update",
+          data: {}
+        });
+      }
+
+      const updatedData = await partnerSays.findByIdAndUpdate(_id, { $set: filter }, { new: true });
+      if (!updatedData) {
+        return res.json({
+          status: false,
+          message: "No data found with the provided _id",
+          data: {}
+        });
+      }
+
+      return res.json({
+        status: true,
+        message: "Data updated successfully",
+        data: updatedData
+      });
+    } catch (error) {
+      return res.json({
+        status: false,
+        message: error.message,
+        data: {}
+      });
+    }
+  }
+
 }
 
 module.exports = Controller;
