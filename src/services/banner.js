@@ -63,6 +63,7 @@ class bannerServices {
                 _id: query._id ? Array.isArray(query._id) ? { $in: query._id?.map(v => Types.ObjectId(v)) } : Types.ObjectId(query._id) : '',
                 position: query.position ? query.position : '',
                 visibleTo: query.visibleTo ? { $in: query.visibleTo } : '',
+                is_app :query.is_app === 'true',
                 status: true,
                 isDeleted: false
             };
@@ -76,7 +77,8 @@ class bannerServices {
                     $project: {
                         url: 1,
                         visibleTo: 1,
-                        // position: 1,
+                        position: 1,
+                        is_app:1,
                         redirectUrl: 1
                     }
                 },

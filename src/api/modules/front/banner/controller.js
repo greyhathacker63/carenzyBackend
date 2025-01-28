@@ -44,7 +44,7 @@ class bannerController {
                  });
              }
 
-            const srvRes = await BannerServices.listFront({ visibleTo, position: req.query.position, isAll: 1 });
+            const srvRes = await BannerServices.listFront({ visibleTo, position: req.query.position,is_app: req.query.is_app, isAll: 1 });
             if (srvRes.data.length) {
                 response.data = srvRes.data;
                 response.message = Message.dataFound.message;
