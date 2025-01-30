@@ -5,6 +5,7 @@ const follows = require('../../../../models/follow')
 const mongoose = require('mongoose');
 const { validationResult } = require('express-validator');
 const { update } = require('lodash');
+const { modelName } = require('../../../../models/file');
 
 class brandController {
 
@@ -86,9 +87,131 @@ class brandController {
                     $lookup: {
                         from: 'dealer_cars',
                         foreignField: 'dealerId',
-                        localField: 'followerId',
+                        localField: 'followingId',
                         as: "carData",
                         pipeline: [
+                            {
+                                $lookup: {
+                                    from: 'brand_models',
+                                    localField: 'modelId',
+                                    foreignField: '_id',
+                                    as: 'modelDetails',
+                                    pipeline: [
+                                        {
+                                            $project: {
+                                                _id: 0,
+                                                name: '$name',
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            { $unwind: { path: '$modelDetails', preserveNullAndEmptyArrays: false } },
+                            {
+                                $lookup: {
+                                    from: 'brands',
+                                    localField: 'brandId',
+                                    foreignField: '_id',
+                                    as: 'brandDetail',
+                                    pipeline: [
+                                        {
+                                            $project: {
+                                                _id: 0,
+                                                name: '$name',
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            { $unwind: { path: '$brandDetail', preserveNullAndEmptyArrays: true } },
+                            {
+                                $lookup: {
+                                    from: 'model_variants',
+                                    localField: 'variantId',
+                                    foreignField: '_id',
+                                    as: 'variantDetail',
+                                    pipeline: [
+                                        {
+                                            $project: {
+                                                _id: 0,
+                                                name: '$name',
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            { $unwind: { path: '$variantDetail', preserveNullAndEmptyArrays: true } },
+                            {
+                                $lookup: {
+                                    from: 'fuel_types',
+                                    localField: 'fuelTypeId',
+                                    foreignField: '_id',
+                                    as: 'fuelTypes',
+                                    pipeline: [
+                                        {
+                                            $project: {
+                                                _id: 0,
+                                                name: '$name',
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                $unwind: {
+                                    path: '$fuelTypes',
+                                    preserveNullAndEmptyArrays: true
+                                }
+                            },
+
+                            {
+                                $lookup: {
+                                    from: 'rtos',
+                                    localField: 'rtoId',
+                                    foreignField: '_id',
+                                    as: 'rtodetail',
+                                    pipeline: [
+                                        {
+                                            $project: {
+                                                _id: 0,
+                                                name: '$name',
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                $unwind: {
+                                    path: '$rtodetail',
+                                    preserveNullAndEmptyArrays: true
+                                }
+                            },
+
+                            
+                            {
+                                $lookup: {
+                                    from: 'states',
+                                    localField: 'stateId',
+                                    foreignField: '_id',
+                                    as: 'statedetail',
+                                    pipeline: [
+                                        {
+                                            $project: {
+                                                _id: 0,
+                                                name: '$name',
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                $unwind: {
+                                    path: '$statedetail',
+                                    preserveNullAndEmptyArrays: true
+                                }
+                            },
+                            
+
                             {
                                 $sort: { updatedAt: -1 }
                             },
@@ -101,9 +224,43 @@ class brandController {
                 {
                     $unwind: '$carData'
                 },
+                // {
+                //     $project: {
+                //         isDeleted: 1,
+                //         underHypothecation: "$carData.underHypothecation",
+                //         bonusNotClaimed: "$carData.bonusNotClaimed",
+                //         bonusNotClaimedPercentage: "$carData.bonusNotClaimedPercentage",
+                //         transmissionType: "$carData.transmissionType",
+                //         keys: "$carData.keys",
+                //         interiorImageVideos: "$carData.interiorImageVideos",
+                //         exteriorImageVideos: "$carData.exteriorImageVideos",
+                //         engineImageVideos: "$carData.engineImageVideos",
+                //         status:"$carData.status",
+                //         approved:"$carData.approved",
+                //         isDeleted:"$carData.isDeleted",
+                //         dealerId:"$carData.dealerId",
+                //         modifiedPrice:"$carData.modifiedPrice",
+                //         askingPrice:"$carData.askingPrice",
+                //         brandId:"$carData.brandId",
+                //         modelId: "$carData.modelId",
+                //         insuranceDate:"$carData.insuranceDate",
+                //         year:"$carData.year",
+                //         kmsDriven:"$carData.kmsDriven",
+                //         numberOfOwners: "$carData.numberOfOwners",
+                //         thumbnailImage: "$carData.thumbnailImage",
+                //         thumbnailImage:"$carData.thumbnailImage",
+                //         reportDescription: "$carData.reportDescription",
+                //         modelName:"$modelDetails.name",
+                //         brandName:"$brandDetail.name",
+                //         variantName: "$variantDetail.name",
+                //         fuelName: "$fuelTypes.name",
+                //         rtoName: "$rtodetail.name",
+                //         stateName:"$statedetail.name",
+                //     }
+                // },
                 {
                     $facet: {
-                        paginatedData :[
+                        paginatedData: [
                             {
                                 $sort: { updatedAt: -1 }
                             },
