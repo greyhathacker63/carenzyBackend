@@ -63,66 +63,86 @@ class Controller {
                         localField: "dealerCarId",
                         foreignField: "_id",
                         as: "carData",
-                       
+                        pipeline: [
+                            {
+                                $lookup: {
+                                    from: 'brands',
+                                    localField: 'brandId',
+                                    foreignField: '_id',
+                                    as: 'brandDetail',
+                                    pipeline: [
+                                        { $project: { _id: 0, name: '$name' } }
+                                    ]
+                                }
+                            },
+                            { $unwind: { path: '$brandDetail', preserveNullAndEmptyArrays: true } },
+                            {
+                                $lookup: {
+                                    from: 'brand_models',
+                                    localField: 'modelId',
+                                    foreignField: '_id',
+                                    as: 'modelDetails',
+                                    pipeline: [
+                                        { $project: { _id: 0, name: '$name' } }
+                                    ]
+                                }
+                            },
+                            { $unwind: { path: '$modelDetails', preserveNullAndEmptyArrays: false } },
+                            {
+                                $lookup: {
+                                    from: 'model_variants',
+                                    localField: 'variantId',
+                                    foreignField: '_id',
+                                    as: 'variantDetail',
+                                    pipeline: [
+                                        { $project: { _id: 0, name: '$name' } }
+                                    ]
+                                }
+                            },
+                            { $unwind: { path: '$variantDetail', preserveNullAndEmptyArrays: true } },
+                            {
+                                $project: {
+                                    _id: 0,
+                                    carName: { "$concat": ["$brandDetail.name", " ", "$modelDetails.name", " ", "$variantDetail.name"] },
+                                    thumbnailImage: 1
+                                }
+                            }
+                        ]
                     }
                 },
                 {
-                    $unwind: {
-                        path: '$carData',
-                        preserveNullAndEmptyArrays: true
+                    $lookup: {
+                        from: 'dealers',
+                        localField: 'dealerToId',
+                        foreignField: '_id',
+                        as: 'dealerDetail',
+                        pipeline: [
+                            { $project: { _id: 0, crz: 1, dealershipName: 1, avatar: 1, phones: 1 } }
+                        ]
                     }
                 },
+                { $unwind: { path: '$dealerDetail', preserveNullAndEmptyArrays: true } },
+                { $unwind: { path: '$carData', preserveNullAndEmptyArrays: true } },
                 {
                     $facet: {
                         paginatedData: [
-                            {
-                                $sort: {
-                                    createdAt: -1
-                                }
-                            },
+                            { $sort: { createdAt: -1 } },
                             { $skip: (page - 1) * limit },
                             { $limit: limit },
                             {
                                 $project: {
-                                    dealerFromId: 1,
-                                    dealerToId: 1,
-                                    dealerCarId: 1,
-                                    phone: 1,
-                                    createdAt: 1,
-                                    updatedAt: 1,
-                                    underHypothecation: "$carData.underHypothecation",
-                                    bonusNotClaimed: "$carData.bonusNotClaimed",
-                                    bonusNotClaimedPercentage: "$carData.bonusNotClaimedPercentage",
-                                    transmissionType: "$carData.transmissionType",
-                                    keys: "$carData.keys",
-                                    interiorImageVideos: "$carData.interiorImageVideos",
-                                    exteriorImageVideos: "$carData.exteriorImageVideos",
-                                    engineImageVideos: "$carData.engineImageVideos",
-                                    status: "$carData.status",
-                                    approved: "$carData.approved",
-                                    isDeleted: "$carData.isDeleted",
-                                    dealerId: "$carData.dealerId",
-                                    modifiedPrice: "$carData.modifiedPrice",
-                                    askingPrice: "$carData.askingPrice",
-                                    brandId: "$carData.brandId",
-                                    modelId: "$carData.modelId",
-                                    insuranceDate: "$carData.insuranceDate",
-                                    variantId: "$carData.variantId",
-                                    year: "$carData.year",
-                                    kmsDriven: "$carData.kmsDriven",
-                                    fuelTypeId: "$carData.fuelTypeId",
-                                    rtoId: "$carData.rtoId",
-                                    stateId: "$carData.stateId",
-                                    numberOfOwners: "$carData.numberOfOwners",
-                                    thumbnailImage: "$carData.thumbnailImage",
-                                    insuranceType: "$carData.insuranceType",
-                                    reportDescription: "$carData.reportDescription"
+                                    _id: 0,
+                                    carName: '$carData.carName',
+                                    carThumbnailImage: { $cond: ["$carData.thumbnailImage", "$carData.thumbnailImage", null] },
+                                    dealerDealershipName: { $cond: ["$dealerDetail.dealershipName", "$dealerDetail.dealershipName", null] },
+                                    dealerCrz: { $cond: ["$dealerDetail.crz", "$dealerDetail.crz", null] },
+                                    dealerAvatar: { $cond: ["$dealerDetail.avatar", "$dealerDetail.avatar", null] },
+                                    phone: { "$first": "$dealerDetail.phones" },
+                                    createdAt: 1
                                 }
-                            },
+                            }
                         ],
-                        total: [
-                            { $count: 'total' }
-                        ]
+                        total: [{ $count: 'total' }]
                     }
                 }
             ]);
@@ -133,8 +153,8 @@ class Controller {
             res.json({
                 status_code: true,
                 message: "Data fetched successfully",
-                data: data,
-                total: total
+                data,
+                total
             });
         } catch (err) {
             res.json({
