@@ -394,11 +394,6 @@ class brandController {
     }
 
 
-
-
-
-
-
     static async count(req, res) {
         try {
             const response = { data: [], message: Message.noContent.message, code: Message.noContent.code, extra: {} };
