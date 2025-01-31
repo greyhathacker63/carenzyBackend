@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator');
 const { uploadFileToS3, deleteFileFromS3 } = require('../../../../utilities/utils');
 const leadingBrand = require('../../../../models/leadingBrand');
 
@@ -125,6 +126,71 @@ class Controller {
             res.json({
                 status_code: false,
                 message: error.message
+            });
+        }
+    }
+
+    
+    
+    static async edit(req, res) {
+        const MESSAGES = {
+            ID_REQUIRED: "Please provide _id",
+            IS_ACTIVE_INVALID: "Please provide is_active as either true or false",
+            BRAND_NOT_FOUND: "Brand not found",
+            BRAND_UPDATED: "Brand updated successfully",
+        };
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.json({
+                status_code: false,
+                message: errors.array()[0].msg,
+                data: {}
+            });
+        }
+    
+        const { _id, is_active } = req.body;
+    
+        if (!_id) {
+            return res.json({
+                status_code: false,
+                message: MESSAGES.ID_REQUIRED,
+                data: {}
+            });
+        }
+    
+        if (typeof is_active !== 'boolean') {
+            return res.json({
+                status_code: false,
+                message: MESSAGES.IS_ACTIVE_INVALID,
+                data: {}
+            });
+        }
+    
+        try {
+            const updatedBrand = await leadingBrand.findByIdAndUpdate(
+                _id,
+                { $set: { is_active } },
+                { new: true }
+            );
+    
+            if (!updatedBrand) {
+                return res.status(404).json({
+                    status_code: false,
+                    message: MESSAGES.BRAND_NOT_FOUND,
+                    data: {}
+                });
+            }
+    
+            return res.json({
+                status_code: true,
+                message: MESSAGES.BRAND_UPDATED,
+                data: updatedBrand
+            });
+        } catch (error) {
+            return res.json({
+                status_code: false,
+                message: error.message,
+                data: {}
             });
         }
     }

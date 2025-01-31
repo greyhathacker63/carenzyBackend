@@ -14,6 +14,7 @@ router.get('/location/list', controller.listDistinctLocation);
 router.use(verificationCheck);
 
 router.post('/save', dealerCarValidation, controller.save);
+router.put('/edit', dealerCarValidation, controller.edit);
 router.post('/delete', controller.delete);
 router.post('/like', controller.updateDealerCarLikes);
 router.post('/like-multiple', controller.updateDealerCarLikesMultiple);

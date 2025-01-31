@@ -1,7 +1,6 @@
 const express = require("express");
 const Controller = require('./controller');
 const multer = require("multer");
-
 const router = express.Router();
 
 const upload = multer({
@@ -19,6 +18,7 @@ const upload = multer({
 router.post("/upload", upload.single('file'), Controller.save);
 router.get("/detail", Controller.detail);
 router.delete("/delete", Controller.delete);
+router.put('/edit',Controller.edit)
 
 
 module.exports = router;

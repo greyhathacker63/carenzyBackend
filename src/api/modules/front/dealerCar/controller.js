@@ -15,7 +15,7 @@ const rtoServices = require('../../../../services/rto');
 const bidService = require("../../../../services/bidding");
 const followService = require("../../../../services/follow");
 const { maskSensitiveData } = require("../../../../utilities/Helper");
-
+const dealerCar = require('../../../../models/dealerCar')
 class Controller {
     static async save(req, res) {
         try {
@@ -492,6 +492,22 @@ class Controller {
         } catch (err) {
             Response.fail(res, Response.createError(Message.dataFetchingError, err));
         }
+    }   
+
+    static async edit(req,res){
+        const {_id , ...extra} = req.body
+        if(_id){
+            return res.json({
+                status_code:false,
+                message :'Please provide _id'
+            })
+        }
+        // const updateCar = await dealerCar.findByIdAndUpdate({_id}, {$set: {extra}})
+        res.json({
+            status_code:true,
+            message :"Data updated sucessfully",
+            data : extra
+        })
     }
 }
 
