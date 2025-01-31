@@ -58,11 +58,67 @@ class Controller {
                     }
                 },
                 {
+                    $lookup: {
+                        from: "dealer_cars",
+                        localField: "dealerCarId",
+                        foreignField: "_id",
+                        as: "carData",
+                       
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$carData',
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
                     $facet: {
                         paginatedData: [
-                            { $sort: { createdAt: -1 } },
+                            {
+                                $sort: {
+                                    createdAt: -1
+                                }
+                            },
                             { $skip: (page - 1) * limit },
-                            { $limit: limit }
+                            { $limit: limit },
+                            {
+                                $project: {
+                                    dealerFromId: 1,
+                                    dealerToId: 1,
+                                    dealerCarId: 1,
+                                    phone: 1,
+                                    createdAt: 1,
+                                    updatedAt: 1,
+                                    underHypothecation: "$carData.underHypothecation",
+                                    bonusNotClaimed: "$carData.bonusNotClaimed",
+                                    bonusNotClaimedPercentage: "$carData.bonusNotClaimedPercentage",
+                                    transmissionType: "$carData.transmissionType",
+                                    keys: "$carData.keys",
+                                    interiorImageVideos: "$carData.interiorImageVideos",
+                                    exteriorImageVideos: "$carData.exteriorImageVideos",
+                                    engineImageVideos: "$carData.engineImageVideos",
+                                    status: "$carData.status",
+                                    approved: "$carData.approved",
+                                    isDeleted: "$carData.isDeleted",
+                                    dealerId: "$carData.dealerId",
+                                    modifiedPrice: "$carData.modifiedPrice",
+                                    askingPrice: "$carData.askingPrice",
+                                    brandId: "$carData.brandId",
+                                    modelId: "$carData.modelId",
+                                    insuranceDate: "$carData.insuranceDate",
+                                    variantId: "$carData.variantId",
+                                    year: "$carData.year",
+                                    kmsDriven: "$carData.kmsDriven",
+                                    fuelTypeId: "$carData.fuelTypeId",
+                                    rtoId: "$carData.rtoId",
+                                    stateId: "$carData.stateId",
+                                    numberOfOwners: "$carData.numberOfOwners",
+                                    thumbnailImage: "$carData.thumbnailImage",
+                                    insuranceType: "$carData.insuranceType",
+                                    reportDescription: "$carData.reportDescription"
+                                }
+                            },
                         ],
                         total: [
                             { $count: 'total' }
