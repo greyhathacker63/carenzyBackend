@@ -186,8 +186,6 @@ class brandController {
                                     preserveNullAndEmptyArrays: true
                                 }
                             },
-
-                            
                             {
                                 $lookup: {
                                     from: 'states',
@@ -210,54 +208,91 @@ class brandController {
                                     preserveNullAndEmptyArrays: true
                                 }
                             },
-                            
-
+                            {
+                                $lookup: {
+                                    from: 'dealers',
+                                    localField: 'dealerId',
+                                    foreignField: '_id',
+                                    as: 'dealerDetail',
+                                }
+                            },
+                            {
+                                $unwind: {
+                                    path: '$dealerDetail',
+                                    preserveNullAndEmptyArrays: true
+                                }
+                            },
                             {
                                 $sort: { updatedAt: -1 }
                             },
                             {
                                 $limit: 1
-                            }
+                            },
+                            {
+                                $project: {
+                                    dealer_phones: '$dealerDetail.phones',
+                                    dealer_termAccepted: "$dealerDetail.termAccepted",
+                                    dealer_status: '$dealerDetail.status',
+                                    dealer_verificationStatus: "$dealerDetail.verifcationStatus",
+                                    dealer_isDeleted: "$dealerDetail.dealer_isDeletedfalse",
+                                    dealer_aadhaarNo: "$dealerDetail.aadhaarNo",
+                                    dealer_address: "$dealerDetail.dealer_address",
+                                    dealer_adharBackImgUrl: "$dealerDetail.adharBackImgUrl",
+                                    dealer_adharFrontImgUrl: "$dealerDetail.adharFrontImgUrl",
+                                    dealer_dealershipName: "$dealerDetail.dealershipName",
+                                    dealer_email: "$dealerDetail.email",
+                                    dealer_name: "$dealerDetail.name",
+                                    dealer_panCardimgUrl: "$dealerDetail.panCardimgUrl",
+                                    dealer_panNo: "$dealerDetail.panNo",
+                                    dealer_pinCode: "$dealerDetail.pinCode",
+                                    dealer_registrationCertificateId: "$dealerDetail.registrationCertificateId",
+                                    dealer_rtoId: "$dealerDetail.rtoId",
+                                    dealer_shopPhotoUrl: "$dealerDetail.shopPhotoUrl",
+                                    dealer_avatar: "$dealerDetail.avatar",
+                                    dealer_crz: "$dealerDetail.crz",
+                                    dealer_gstImgUrl: "$dealerDetail.gstImgUrl",
+                                    dealer_registrationCertImgUrl: "$dealerDetail.registrationCertImgUrl",
+                                    dealer_stateId: "$dealerDetail.stateId",
+                                    dealer_location: "$dealerDetail.location",
+                                    dealer_carAllowedIn: "$dealerDetail.carAllowedIn",
+                                    dealer_lastBidNotificationId: "$dealerDetail.lastBidNotificationId",
+                                    dealer_lastGeneralNotificationId: "$dealerDetail.lastGeneralNotificationId",
+                                    brandName: "$brandDetail.name",
+                                    variantName: "$variantDetail.name",
+                                    fuelName: "$fuelTypes.name",
+                                    rtoName: "$rtodetail.name",
+                                    stateName: "$statedetail.name",
+                                    underHypothecation: 1,
+                                    isDeleted: 1,
+                                    bonusNotClaimed: 1,
+                                    bonusNotClaimedPercentage: 1,
+                                    transmissionType: 1,
+                                    keys: 1,
+                                    interiorImageVideos: 1,
+                                    exteriorImageVideos: 1,
+                                    engineImageVideos: 1,
+                                    status: 1,
+                                    approved: 1,
+                                    isDeleted: 1,
+                                    dealerId: 1,
+                                    modifiedPrice: 1,
+                                    askingPrice: 1,
+                                    brandId: 1,
+                                    modelId: 1,
+                                    insuranceDate: 1,
+                                    year: 1,
+                                    kmsDriven: 1,
+                                    numberOfOwners: 1,
+                                    thumbnailImage: 1,
+                                    reportDescription: 1
+                                }
+                            },
                         ]
                     }
                 },
                 {
                     $unwind: '$carData'
                 },
-                // {
-                //     $project: {
-                //         isDeleted: 1,
-                //         underHypothecation: "$carData.underHypothecation",
-                //         bonusNotClaimed: "$carData.bonusNotClaimed",
-                //         bonusNotClaimedPercentage: "$carData.bonusNotClaimedPercentage",
-                //         transmissionType: "$carData.transmissionType",
-                //         keys: "$carData.keys",
-                //         interiorImageVideos: "$carData.interiorImageVideos",
-                //         exteriorImageVideos: "$carData.exteriorImageVideos",
-                //         engineImageVideos: "$carData.engineImageVideos",
-                //         status:"$carData.status",
-                //         approved:"$carData.approved",
-                //         isDeleted:"$carData.isDeleted",
-                //         dealerId:"$carData.dealerId",
-                //         modifiedPrice:"$carData.modifiedPrice",
-                //         askingPrice:"$carData.askingPrice",
-                //         brandId:"$carData.brandId",
-                //         modelId: "$carData.modelId",
-                //         insuranceDate:"$carData.insuranceDate",
-                //         year:"$carData.year",
-                //         kmsDriven:"$carData.kmsDriven",
-                //         numberOfOwners: "$carData.numberOfOwners",
-                //         thumbnailImage: "$carData.thumbnailImage",
-                //         thumbnailImage:"$carData.thumbnailImage",
-                //         reportDescription: "$carData.reportDescription",
-                //         modelName:"$modelDetails.name",
-                //         brandName:"$brandDetail.name",
-                //         variantName: "$variantDetail.name",
-                //         fuelName: "$fuelTypes.name",
-                //         rtoName: "$rtodetail.name",
-                //         stateName:"$statedetail.name",
-                //     }
-                // },
                 {
                     $facet: {
                         paginatedData: [
@@ -268,7 +303,67 @@ class brandController {
                                 $skip: (page - 1) * limit
                             }, {
                                 $limit: limit
-                            }
+                            },
+                            {
+                                $project: {
+                                    isDeleted: 1,
+                                    followerId: 1,
+                                    followingId:1,
+                                    dealer_phones: '$carData.dealer_phones',
+                                    dealer_termAccepted: "$carData.dealer_termAccepted",
+                                    dealer_status: '$carData.dealer_status',
+                                    dealer_verificationStatus: "$carData.dealer_verificationStatus",
+                                    dealer_isDeleted: "$carData.dealer_isDeleted",
+                                    dealer_aadhaarNo: "$carData.dealer_aadhaarNo",
+                                    dealer_address: "$carData.dealer_address",
+                                    dealer_adharBackImgUrl: "$carData.dealer_adharBackImgUrl",
+                                    dealer_adharFrontImgUrl: "$carData.dealer_adharFrontImgUrl",
+                                    dealer_dealershipName: "$carData.dealer_dealershipName",
+                                    dealer_email: "$carData.dealer_email",
+                                    dealer_name: "$carData.dealer_name",
+                                    dealer_panCardimgUrl: "$carData.dealer_panCardimgUrl",
+                                    dealer_panNo: "$carData.dealer_panNo",
+                                    dealer_pinCode: "$carData.dealer_pinCode",
+                                    dealer_registrationCertificateId: "$carData.dealer_registrationCertificateId",
+                                    dealer_rtoId: "$carData.dealer_rtoId",
+                                    dealer_shopPhotoUrl: "$carData.dealer_shopPhotoUrl",
+                                    dealer_avatar: "$carData.dealer_avatar",
+                                    dealer_crz: "$carData.dealer_crz",
+                                    dealer_gstImgUrl: "$carData.dealer_gstImgUrl",
+                                    dealer_registrationCertImgUrl: "$carData.dealer_registrationCertImgUrl",
+                                    dealer_stateId: "$carData.dealer_stateId",
+                                    dealer_location: "$carData.dealer_location",
+                                    dealer_carAllowedIn: "$carData.dealer_carAllowedIn",
+                                    dealer_lastBidNotificationId: "$carData.dealer_lastBidNotificationId",
+                                    dealer_lastGeneralNotificationId: "$carData.dealer_lastGeneralNotificationId",
+                                    brandName: "$carData.brandName",
+                                    variantName: "$carData.variantName",
+                                    fuelName: "$carData.fuelName",
+                                    rtoName: "$carData.rtoName",
+                                    stateName: "$carData.stateName",
+                                    underHypothecation:"$carData.underHypothecation",
+                                    bonusNotClaimed:"$carData.bonusNotClaimed",
+                                    bonusNotClaimedPercentage:"$carData.bonusNotClaimedPercentage",
+                                    transmissionType:"$carData.transmissionType",
+                                    keys:"$carData.keys",
+                                    interiorImageVideos:"$carData.interiorImageVideos",
+                                    exteriorImageVideos:"$carData.exteriorImageVideos",
+                                    engineImageVideos:"$carData.engineImageVideos",
+                                    status:"$carData.status",
+                                    approved:"$carData.approved",
+                                    dealerId:"$carData.dealerId",
+                                    modifiedPrice:"$carData.modifiedPrice",
+                                    askingPrice:"$carData.askingPrice",
+                                    brandId:"$carData.brandId",
+                                    modelId:"$carData.modelId",
+                                    insuranceDate:"$carData.insuranceDate",
+                                    year:"$carData.year",
+                                    kmsDriven:"$carData.kmsDriven",
+                                    numberOfOwners:"$carData.numberOfOwners",
+                                    thumbnailImage:"$carData.thumbnailImage",
+                                    reportDescription:"$carData.reportDescription"
+                                }
+                            },
                         ],
                         total: [
                             {
