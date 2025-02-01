@@ -141,7 +141,7 @@ class dealerLeadServices {
 
             console.log("data.dealerToId", data.dealerToId)
             console.log("data.dealerFromId", data.dealerFromId)
-            if (data.dealerToId === data.dealerToId) {
+            if (data.dealerToId === data.dealerFromId) {
                 // return res.json({
                 //     success: "true",
                 //     message: "dealerFromId and dealerToId both are same",
