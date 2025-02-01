@@ -134,11 +134,11 @@ class dealerLeadServices {
         const response = { data: {}, status: false };
         try {
             const docData = _id ? await dealerLeadModel.findById(_id) : new dealerLeadModel();
-            docData.dealerFromId = data.dealerFromId;
-            docData.dealerToId = data.dealerToId;
+            docData.dealerFromId = data.dealerToId;
+            docData.dealerToId = data.dealerFromId;
             docData.dealerCarId = data.dealerCarId;
             docData.phone = data.phone;
-            dealerFromId
+            
 
             await docData.save();
 
