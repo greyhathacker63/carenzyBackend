@@ -10,16 +10,16 @@ class Controller {
     static async save(req, res) {
         try {
             const { name, city, registration_number, make, model, variant, transmission, year, fuel, expected_price, no_of_owner, mobile, user_id } = req.body;
-            const requiredFields = ["name", "expected_price", "no_of_owner", "fuel", "year", "transmission", "model", "make", "registration_number", "city", "mobile"];
-            const missingFields = requiredFields.filter(field => !req.body[field]);
+            // const requiredFields = ["name", "expected_price", "no_of_owner", "fuel", "year", "transmission", "model", "make", "registration_number", "city", "mobile"];
+            // const missingFields = requiredFields.filter(field => !req.body[field]);
 
-            if (missingFields.length) {
-                return res.json({
-                    status_code: false,
-                    message: `Missing fields: ${missingFields.join(', ')}`,
-                    data: {}
-                });
-            }
+            // if (missingFields.length) {
+            //     return res.json({
+            //         status_code: false,
+            //         message: `Missing fields: ${missingFields.join(', ')}`,
+            //         data: {}
+            //     });
+            // }
 
             const response = await sellCar.create(req.body);
 
