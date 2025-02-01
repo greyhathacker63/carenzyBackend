@@ -138,12 +138,14 @@ class dealerLeadServices {
             docData.dealerToId = data.dealerFromId;
             docData.dealerCarId = data.dealerCarId;
             if (data.dealerToId === data.dealerToId) {
-                return res.json({
-                    success: "true",
-                    message: "dealerFromId and dealerToId both are same",
-                    data: {},
-                    code: 200
-                })
+                // return res.json({
+                //     success: "true",
+                //     message: "dealerFromId and dealerToId both are same",
+                //     data: {},
+                //     code: 200
+                // })
+                response.status = false;
+                return response;
             }
             docData.phone = data.phone;
 
