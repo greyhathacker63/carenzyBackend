@@ -133,7 +133,7 @@ class Controller {
                         foreignField: '_id',
                         as: 'dealerDetail',
                         pipeline: [
-                            { $project: { _id: 0, crz: 1, dealershipName: 1, avatar: 1, phones: 1 } }
+                            { $project: { _id: 0, crz: 1, dealershipName: 1, avatar: 1 } }
                         ]
                     }
                 },
@@ -153,7 +153,7 @@ class Controller {
                                     dealerDealershipName: { $cond: ["$dealerDetail.dealershipName", "$dealerDetail.dealershipName", null] },
                                     dealerCrz: { $cond: ["$dealerDetail.crz", "$dealerDetail.crz", null] },
                                     dealerAvatar: { $cond: ["$dealerDetail.avatar", "$dealerDetail.avatar", null] },
-                                    phone: { "$first": "$dealerDetail.phones" },
+                                    phone: 1,
                                     createdAt: 1
                                 }
                             }
