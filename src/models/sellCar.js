@@ -5,12 +5,12 @@ const sellCarSchema = new Schema(
     {
         name: {
             type: String,
-            required: true,
+            // required: true,
             trim: true
         },
         city: {
             type: String,
-            required: true,
+            // required: true,
             trim: true
         },
         registration_number: {
@@ -20,12 +20,12 @@ const sellCarSchema = new Schema(
         },
         make: {
             type: Types.ObjectId,
-            required: true,
+            // required: true,
             trim: true
         },
         model: {
             type: Types.ObjectId,
-            required: true,
+            // required: true,
             trim: true
         },
         variant: {
@@ -35,31 +35,31 @@ const sellCarSchema = new Schema(
         transmission: {
             type: String,
             enum: ['automatic', 'manual'],
-            required: true
+            // required: true
         },
         year: {
             type: Number,
-            required: true,
+            // required: true,
             min: 1900,
             max: new Date().getFullYear()
         },
         fuel: {
             type: Types.ObjectId,
-            required: true
+            // required: true
         },
         user_id:{
             type: Types.ObjectId,
-            required: true,
+            // required: true,
             trim: true
         },
         no_of_owner: {
             type: Number,
-            required: true,
+            // required: true,
             min: 1
         },
         expected_price: {
             type: Number,
-            required: true,
+            // required: true,
             min: 0
         },
         plan_to_sell: {
@@ -72,7 +72,7 @@ const sellCarSchema = new Schema(
         },
         mobile:{
             type: String,
-            required: true,
+            // required: true,
             trim: true
         },
         is_deleted: {
