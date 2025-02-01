@@ -82,6 +82,10 @@ class brandController {
                         followerId: followerId,
                         isDeleted: false
                     }
+                },{
+                    $sort: {
+                        createdAt:-1
+                    }
                 },
                 {
                     $lookup: {
