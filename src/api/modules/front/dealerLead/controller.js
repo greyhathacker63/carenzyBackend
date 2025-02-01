@@ -21,6 +21,10 @@ class Controller {
             }
 
             const srvRes = await dealerLeadServices.save({ ...req.body, dealerFromId: req.__cuser._id });
+            if(srvRes.message== "dealerFromId and dealerToId both are same"){
+                response.message = "dealerFromId and dealerToId both are same"
+                response.code = Message.dataSaved.code;
+            }
             if (srvRes.status) {
                 // response.data = srvRes.data;
                 response.message = Message.dataSaved.message;
