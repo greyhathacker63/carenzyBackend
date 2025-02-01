@@ -9,6 +9,24 @@ class Controller {
     static async save(req, res) {
         try {
             const response = { data: null, message: Message.badRequest.message, code: Message.badRequest.code };
+            if (req.body.dealerFromId === req.body.dealerToId) {
+                return res.json({
+                    success: "true",
+                    message: "dealerFromId and dealerToId both are same",
+                    data: {},
+                    code: 200
+                })
+            }
+            const dataExistAlready = await dealerLeadModel.findOne({ dealerCarId: req.body.dealerCarId, phone: req.body.phone })
+            if (dataExistAlready) {
+                return res.json({
+                    success: "true",
+                    message: "Data is already saved",
+                    data: {},
+                    code: 200
+                })
+            }
+
             const srvRes = await dealerLeadServices.save({ ...req.body, dealerFromId: req.__cuser._id });
             if (srvRes.status) {
                 // response.data = srvRes.data;
@@ -17,7 +35,8 @@ class Controller {
             }
             Response.success(res, response);
         } catch (err) {
-            Response.fail(res, Response.createError(Message.dataDeletionError, err));
+            res.json(err.message)
+            // Response.fail(res, Response.createError(Message.dataDeletionError, err));
         }
     }
     // static async list(req, res) {
