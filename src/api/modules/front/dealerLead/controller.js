@@ -70,7 +70,7 @@ class Controller {
             const dealerFromIdData = await dealerLeadModel.aggregate([
                 {
                     $match: {
-                        dealerToId: new mongoose.Types.ObjectId(dealerFromId)
+                        dealerFromId: new mongoose.Types.ObjectId(dealerFromId)
                     }
                 },
                 {
