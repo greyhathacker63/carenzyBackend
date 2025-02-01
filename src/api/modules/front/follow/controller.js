@@ -82,10 +82,6 @@ class brandController {
                         followerId: followerId,
                         isDeleted: false
                     }
-                },{
-                    $sort: {
-                        createdAt:-1
-                    }
                 },
                 {
                     $lookup: {
@@ -288,7 +284,8 @@ class brandController {
                                     kmsDriven: 1,
                                     numberOfOwners: 1,
                                     thumbnailImage: 1,
-                                    reportDescription: 1
+                                    reportDescription: 1,
+                                    updatedAt:1
                                 }
                             },
                         ]
@@ -301,7 +298,7 @@ class brandController {
                     $facet: {
                         paginatedData: [
                             {
-                                $sort: { updatedAt: -1 }
+                                $sort: { 'carData.updatedAt': -1 }
                             },
                             {
                                 $skip: (page - 1) * limit
@@ -312,7 +309,7 @@ class brandController {
                                 $project: {
                                     isDeleted: 1,
                                     followerId: 1,
-                                    followingId:1,
+                                    followingId: 1,
                                     dealer_phones: '$carData.dealer_phones',
                                     dealer_termAccepted: "$carData.dealer_termAccepted",
                                     dealer_status: '$carData.dealer_status',
@@ -345,27 +342,28 @@ class brandController {
                                     fuelName: "$carData.fuelName",
                                     rtoName: "$carData.rtoName",
                                     stateName: "$carData.stateName",
-                                    underHypothecation:"$carData.underHypothecation",
-                                    bonusNotClaimed:"$carData.bonusNotClaimed",
-                                    bonusNotClaimedPercentage:"$carData.bonusNotClaimedPercentage",
-                                    transmissionType:"$carData.transmissionType",
-                                    keys:"$carData.keys",
-                                    interiorImageVideos:"$carData.interiorImageVideos",
-                                    exteriorImageVideos:"$carData.exteriorImageVideos",
-                                    engineImageVideos:"$carData.engineImageVideos",
-                                    status:"$carData.status",
-                                    approved:"$carData.approved",
-                                    dealerId:"$carData.dealerId",
-                                    modifiedPrice:"$carData.modifiedPrice",
-                                    askingPrice:"$carData.askingPrice",
-                                    brandId:"$carData.brandId",
-                                    modelId:"$carData.modelId",
-                                    insuranceDate:"$carData.insuranceDate",
-                                    year:"$carData.year",
-                                    kmsDriven:"$carData.kmsDriven",
-                                    numberOfOwners:"$carData.numberOfOwners",
-                                    thumbnailImage:"$carData.thumbnailImage",
-                                    reportDescription:"$carData.reportDescription"
+                                    underHypothecation: "$carData.underHypothecation",
+                                    bonusNotClaimed: "$carData.bonusNotClaimed",
+                                    bonusNotClaimedPercentage: "$carData.bonusNotClaimedPercentage",
+                                    transmissionType: "$carData.transmissionType",
+                                    keys: "$carData.keys",
+                                    interiorImageVideos: "$carData.interiorImageVideos",
+                                    exteriorImageVideos: "$carData.exteriorImageVideos",
+                                    engineImageVideos: "$carData.engineImageVideos",
+                                    status: "$carData.status",
+                                    approved: "$carData.approved",
+                                    dealerId: "$carData.dealerId",
+                                    modifiedPrice: "$carData.modifiedPrice",
+                                    askingPrice: "$carData.askingPrice",
+                                    brandId: "$carData.brandId",
+                                    modelId: "$carData.modelId",
+                                    insuranceDate: "$carData.insuranceDate",
+                                    year: "$carData.year",
+                                    kmsDriven: "$carData.kmsDriven",
+                                    numberOfOwners: "$carData.numberOfOwners",
+                                    thumbnailImage: "$carData.thumbnailImage",
+                                    reportDescription: "$carData.reportDescription",
+                                    updatedAt:'$carData.updatedAt'
                                 }
                             },
                         ],
