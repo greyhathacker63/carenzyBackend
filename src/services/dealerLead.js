@@ -137,9 +137,18 @@ class dealerLeadServices {
             docData.dealerFromId = data.dealerToId;
             docData.dealerToId = data.dealerFromId;
             docData.dealerCarId = data.dealerCarId;
+            if (data.dealerToId === data.dealerToId) {
+                return res.json({
+                    success: "true",
+                    message: "dealerFromId and dealerToId both are same",
+                    data: {},
+                    code: 200
+                })
+            }
             docData.phone = data.phone;
-            
 
+            console.log("data.dealerToId",data.dealerToId)
+            console.log("data.dealerFromId",data.dealerFromId)
             await docData.save();
 
             response.data = docData;

@@ -9,14 +9,7 @@ class Controller {
     static async save(req, res) {
         try {
             const response = { data: null, message: Message.badRequest.message, code: Message.badRequest.code };
-            if (req.body.dealerFromId === req.body.dealerToId) {
-                return res.json({
-                    success: "true",
-                    message: "dealerFromId and dealerToId both are same",
-                    data: {},
-                    code: 200
-                })
-            }
+           
             const dataExistAlready = await dealerLeadModel.findOne({ dealerCarId: req.body.dealerCarId, phone: req.body.phone })
             if (dataExistAlready) {
                 return res.json({
