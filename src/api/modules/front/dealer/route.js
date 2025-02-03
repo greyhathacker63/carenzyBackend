@@ -17,6 +17,7 @@ router.get("/accept-terms", controller.getTermsAcceptance);
 router.get("/details", controller.dealerData);
 router.post("/update-user", controller.dealerUpdate);
 router.put("/updateUser", controller.updateUser);
+router.put("/updateDealer", controller.updateDealer);
 router.post("/update-avatar", validation.updateDealerFrontProfileImg, /* multerUpload?.single('file'), uploadToS3Bucket, */ controller.dealerProfileAvatarChange);
 router.post("/update-shopimg", validation.updateDealerFrontShopImg, /* multerUpload?.single('file'), uploadToS3Bucket, */ controller.dealerShopImgChange);
 

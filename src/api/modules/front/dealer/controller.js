@@ -180,6 +180,112 @@ class controller {
 		}
 	}
 
+
+	static async updateUser(req, res) {
+		const { _id, name, email, address, pinCode, city, stateId } = req.body;
+		if (!_id) {
+			return res.json({
+				status_code: false,
+				message: "Please provide _id",
+				data:{}
+			});
+		}
+		const updateCriteria = {};
+		if (name) updateCriteria.name = name;
+		if (email) updateCriteria.email = email;
+		if (address) updateCriteria.address = address;
+		if (city) updateCriteria.city = city;
+		if (stateId) updateCriteria.stateId = stateId;
+		if (pinCode) updateCriteria.pinCode = pinCode;
+
+
+		if (Object.keys(updateCriteria).length === 0) {
+			return res.json({
+				status_code: false,
+				message: "Please provide any key to update",
+				data: {}
+			});
+		}
+		console.log("hi")
+		try {
+			const srvRes = await dealerModel.findByIdAndUpdate({ _id }, { $set: updateCriteria }, { new: true });
+			if (!srvRes) {
+				return res.json({
+					status_code: false,
+					message: "Please provide correct _id",
+					data: {}
+				});
+			}
+			return res.json({
+				status_code: true,
+				message: "Dealer updated successfully",
+				data: srvRes
+			});
+		} catch (err) {
+			return res.json({
+				status_code: false,
+				message: err.message,
+				data: {}
+
+			});
+		}
+	}
+
+
+	static async updateDealer(req, res) {
+		const { _id, dealershipName, address, pinCode, city, stateId, shopPhotoUrl, aadhaarNo, adharFrontImgUrl, adharBackImgUrl, panNo, panCardimgUrl, crz } = req.body;
+		if (!_id) {
+			return res.json({
+				status_code: false,
+				message: "Please provide _id",
+				data: {}
+			});
+		}
+		const updateCriteria = {};
+		if (dealershipName) updateCriteria.dealershipName = dealershipName;
+		if (address) updateCriteria.address = address;
+		if (city) updateCriteria.city = city;
+		if (stateId) updateCriteria.stateId = stateId;
+		if (pinCode) updateCriteria.pinCode = pinCode;
+		if (shopPhotoUrl) updateCriteria.shopPhotoUrl = shopPhotoUrl;
+		if (aadhaarNo) updateCriteria.aadhaarNo = aadhaarNo;
+		if (adharFrontImgUrl) updateCriteria.adharFrontImgUrl = adharFrontImgUrl;
+		if (adharBackImgUrl) updateCriteria.adharBackImgUrl = adharBackImgUrl;
+		if (panNo) updateCriteria.panNo = panNo;
+		if (panCardimgUrl) updateCriteria.panCardimgUrl = panCardimgUrl;
+		if (crz) updateCriteria.crz = crz;
+
+		if (Object.keys(updateCriteria).length === 0) {
+			return res.json({
+				status_code: false,
+				message: "Please provide any key to update",
+				data: {}
+			});
+		}
+
+		try {
+			const srvRes = await dealerModel.findByIdAndUpdate({ _id }, { $set: updateCriteria }, { new: true });
+			if (!srvRes) {
+				return res.json({
+					status_code: false,
+					message: "Please provide correct _id",
+					data: {}
+				});
+			}
+			return res.json({
+				status_code: true,
+				message: "Dealer updated successfully",
+				data: srvRes
+			});
+		} catch (err) {
+			return res.json({
+				status_code: false,
+				message: err.message,
+				data: {}
+			});
+		}
+	}
+
 	static async dealerData(req, res) {
 		try {
 			const response = { data: {}, message: Message.badRequest.message, code: Message.badRequest.code, extra: {} };
