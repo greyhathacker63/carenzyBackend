@@ -223,6 +223,28 @@ class brandController {
                                 }
                             },
                             {
+                                $lookup: {
+                                    from: 'rtos',
+                                    localField: 'rtoId',
+                                    foreignField: '_id',
+                                    as: 'rtoDetail',
+                                    pipeline:[
+                                        {
+                                            $project:{
+                                                _id:0,
+                                                name: 1,
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                $unwind: {
+                                    path: '$rtoDetail',
+                                    preserveNullAndEmptyArrays: true
+                                }
+                            },
+                            {
                                 $sort: { updatedAt: -1 }
                             },
                             {
@@ -246,7 +268,7 @@ class brandController {
                                     dealer_panNo: "$dealerDetail.panNo",
                                     dealer_pinCode: "$dealerDetail.pinCode",
                                     dealer_registrationCertificateId: "$dealerDetail.registrationCertificateId",
-                                    dealer_rtoId: "$dealerDetail.rtoId",
+                                    dealer_rto_name: "$rtoDetail.name",
                                     dealer_shopPhotoUrl: "$dealerDetail.shopPhotoUrl",
                                     dealer_avatar: "$dealerDetail.avatar",
                                     dealer_crz: "$dealerDetail.crz",
@@ -285,7 +307,8 @@ class brandController {
                                     numberOfOwners: 1,
                                     thumbnailImage: 1,
                                     reportDescription: 1,
-                                    updatedAt:1
+                                    updatedAt:1,
+                                    insuranceType:1
                                 }
                             },
                         ]
@@ -310,6 +333,7 @@ class brandController {
                                     isDeleted: 1,
                                     followerId: 1,
                                     followingId: 1,
+                                    insuranceType: { $cond: ["$carData.insuranceType", "$carData.insuranceType", null] },
                                     dealer_phones: '$carData.dealer_phones',
                                     dealer_termAccepted: "$carData.dealer_termAccepted",
                                     dealer_status: '$carData.dealer_status',
@@ -326,7 +350,7 @@ class brandController {
                                     dealer_panNo: "$carData.dealer_panNo",
                                     dealer_pinCode: "$carData.dealer_pinCode",
                                     dealer_registrationCertificateId: "$carData.dealer_registrationCertificateId",
-                                    dealer_rtoId: "$carData.dealer_rtoId",
+                                    dealer_rto_name: "$carData.dealer_rto_name",
                                     dealer_shopPhotoUrl: "$carData.dealer_shopPhotoUrl",
                                     dealer_avatar: "$carData.dealer_avatar",
                                     dealer_crz: "$carData.dealer_crz",
