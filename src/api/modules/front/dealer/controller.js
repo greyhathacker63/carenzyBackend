@@ -12,6 +12,7 @@ const Response = require('../../../../utilities/Response');
 const Message = require('../../../../utilities/Message');
 const { genRandomNumber, encryptData, decryptData } = require('./../../../../utilities/Helper');
 const config = require('../../../../config');
+const dealerModel = require('../../../../models/dealer')
 
 class controller {
 
@@ -128,6 +129,57 @@ class controller {
 		}
 	}
 
+
+	static async updateUser(req, res) {
+		const { _id, name, email, address, pinCode, city, stateId } = req.body;
+		if (!_id) {
+			return res.json({
+				status_code: false,
+				message: "Please provide _id",
+				data:{}
+			});
+		}
+		const updateCriteria = {};
+		if (name) updateCriteria.name = name;
+		if (email) updateCriteria.email = email;
+		if (address) updateCriteria.address = address;
+		if (city) updateCriteria.city = city;
+		if (stateId) updateCriteria.stateId = stateId;
+		if (pinCode) updateCriteria.pinCode = pinCode;
+
+
+		if (Object.keys(updateCriteria).length === 0) {
+			return res.json({
+				status_code: false,
+				message: "Please provide any key to update",
+				data: {}
+			});
+		}
+		console.log("hi")
+		try {
+			const srvRes = await dealerModel.findByIdAndUpdate({ _id }, { $set: updateCriteria }, { new: true });
+			if (!srvRes) {
+				return res.json({
+					status_code: false,
+					message: "Please provide correct _id",
+					data: {}
+				});
+			}
+			return res.json({
+				status_code: true,
+				message: "Dealer updated successfully",
+				data: srvRes
+			});
+		} catch (err) {
+			return res.json({
+				status_code: false,
+				message: err.message,
+				data: {}
+
+			});
+		}
+	}
+
 	static async dealerData(req, res) {
 		try {
 			const response = { data: {}, message: Message.badRequest.message, code: Message.badRequest.code, extra: {} };
@@ -163,7 +215,7 @@ class controller {
 			// const crzNumber = req.__cuser.crz ? req.__cuser.crz : null
 
 			// const srvRes = await dealerService.dealerUpdate({ crz: crzNumber, ...JSON.parse(JSON.stringify(req.__cuser)), ...req.body, _id: req.__cuser._id });
-			const srvRes = await dealerService.dealerUpdate({...JSON.parse(JSON.stringify(req.__cuser)), ...req.body, _id: req.__cuser._id });
+			const srvRes = await dealerService.dealerUpdate({ ...JSON.parse(JSON.stringify(req.__cuser)), ...req.body, _id: req.__cuser._id });
 
 			if (srvRes.status) {
 				response.message = Message.profileUpdate.message;
@@ -296,22 +348,22 @@ class controller {
 	}
 
 	// Distinct location
-    static async listDistinctLocation(req, res) {
-        try {
-            const response = { data: [], message: Message.noContent.message, code: Message.noContent.code, extra: {} };
-            const srvRes = await dealerService.listDistinctLocation({ ...req.query });
-            if (srvRes.data.length) {
-                response.data = srvRes.data;
-                response.message = Message.dataFound.message;
-                response.code = Message.dataFound.code;
-            }
+	static async listDistinctLocation(req, res) {
+		try {
+			const response = { data: [], message: Message.noContent.message, code: Message.noContent.code, extra: {} };
+			const srvRes = await dealerService.listDistinctLocation({ ...req.query });
+			if (srvRes.data.length) {
+				response.data = srvRes.data;
+				response.message = Message.dataFound.message;
+				response.code = Message.dataFound.code;
+			}
 
-            response.extra = srvRes.extra;
-            Response.success(res, response);
-        } catch (err) {
-            Response.fail(res, Response.createError(Message.dataFetchingError, err));
-        }
-    }
+			response.extra = srvRes.extra;
+			Response.success(res, response);
+		} catch (err) {
+			Response.fail(res, Response.createError(Message.dataFetchingError, err));
+		}
+	}
 }
 
 module.exports = controller;
